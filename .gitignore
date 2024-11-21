@@ -1,0 +1,16 @@
+# Entornos virtuales
+venv/
+__pycache__/
+
+# Configuración de sistema
+*.pyc
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+
+# Archivos de entorno
+.env
+
+# Archivos de medios
+members_photos/
