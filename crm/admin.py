@@ -2,12 +2,13 @@ from django.contrib import admin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-from .models import Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus, AgeSegment
+from .models import Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus, AgeSegment, MedicalCondition
 from django import forms
 
 admin.site.register(AccessStatus)
 admin.site.register(DiscoverySource)
 admin.site.register(AgeSegment)
+admin.site.register(MedicalCondition)
 
 class MemberAdminForm(forms.ModelForm):
     class Meta:
@@ -89,7 +90,7 @@ class MemberAdmin(admin.ModelAdmin):
             ),
         }),
         (_('Health Conditions'), {
-            'fields': ('has_illness', 'has_allergy', 'has_flat_feet', 'has_heart_conditions'),
+            'fields': ('has_illness', 'has_allergy', 'has_flat_feet', 'has_heart_conditions', 'medical_condition', 'medical_condition_details'),
             'classes': ('collapse',)  # Collapse the 'Health Conditions' section
         }),
         (_('Discovery Source'), {

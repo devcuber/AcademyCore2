@@ -12,6 +12,13 @@ class DiscoverySource(models.Model):
 
     def __str__(self):
         return self.name
+    
+class MedicalCondition(models.Model):
+    """Model to represent discovery sources of the members (e.g., social media)."""
+    name = models.CharField(max_length=100, unique=True, verbose_name=_("Condition Name"))
+
+    def __str__(self):
+        return self.name
 
 class AccessStatus(models.Model):
     """Model to represent the status of a member (Active, Inactive, Temporarily Inactive)."""
@@ -48,6 +55,9 @@ class Person(models.Model):
 
     how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
     how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
+
+    medical_condition = models.ForeignKey('crm.MedicalCondition', on_delete=models.SET_NULL, null=True, blank=False)
+    medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
 
     # Métodos comunes
     @property

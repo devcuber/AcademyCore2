@@ -15,6 +15,12 @@ def create_default_statuses(apps, schema_editor):
     for status_name in default_statuses:
         AccessStatus.objects.get_or_create(name=status_name)
 
+def create_default_discovery_source(apps, schema_editor):
+    # Obtener el modelo DiscoverySource
+    DiscoverySource = apps.get_model('crm', 'DiscoverySource')
+    
+    # Crear el registro "other" si no existe
+    DiscoverySource.objects.get_or_create(name="other")
 
 class Migration(migrations.Migration):
 
@@ -87,7 +93,6 @@ class Migration(migrations.Migration):
                 ('status', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='member_statuses', to='crm.accessstatus')),
             ],
         ),
-        # Inserta los estatus predeterminados después de crear las tablas
         migrations.RunPython(create_default_statuses),
-
+        migrations.RunPython(create_default_discovery_source),
     ]
