@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-from .models import Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus
+from .models import Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus, AgeSegment
 from django import forms
 
 admin.site.register(AccessStatus)
 admin.site.register(DiscoverySource)
+admin.site.register(AgeSegment)
 
 class MemberAdminForm(forms.ModelForm):
     class Meta:
@@ -53,24 +54,10 @@ class MemberAdmin(admin.ModelAdmin):
     search_fields = ('member_code', 'name', 'curp', 'email')
     list_filter = ('gender',)
     ordering = ('member_code',)
-    readonly_fields = ('enrollment_date', 'calculate_age', 'photo_preview')
+    readonly_fields = ('enrollment_date', 'age', 'age_segment', 'photo_preview')
 
     # Add inlines for contacts and access logs
     inlines = [MemberContactInline, MemberAccessLogInline]
-
-    def calculate_age(self, obj):
-        """Method to calculate the member's age based on their birth date."""
-        if obj.birth_date:
-            today = timezone.now().date()
-            age = today.year - obj.birth_date.year
-            if today.month < obj.birth_date.month or (
-                today.month == obj.birth_date.month and today.day < obj.birth_date.day
-            ):
-                age -= 1
-            return age
-        return _("Not available")  # Message if birth date is not provided
-
-    calculate_age.short_description = _('Age')
 
     def photo_preview(self, obj):
         """Method to display a photo preview in the admin."""
@@ -98,7 +85,7 @@ class MemberAdmin(admin.ModelAdmin):
         (_('General Information'), {
             'fields': (
                 'photo_preview','photo', 'member_code', 'name', 'curp', 'email', 'phone_number',
-                'gender', 'enrollment_date', 'birth_date', 'calculate_age'
+                'gender', 'enrollment_date', 'birth_date', 'age', 'age_segment'
             ),
         }),
         (_('Health Conditions'), {
