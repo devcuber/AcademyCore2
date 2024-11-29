@@ -1,32 +1,31 @@
 from django.contrib import admin
-from .models import Preregister
+from .models import Preregister,PreRegisterContact
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
+class PreregisterContactInline(admin.TabularInline):
+    model = PreRegisterContact
+    extra = 1
+    fields = ('name', 'phone_number', 'relation', 'is_primary', 'is_emergency')
+
 @admin.register(Preregister)
 class PreregisterAdmin(admin.ModelAdmin):
     list_display = (
-        'folio','photo_preview', 'name'
+        'photo_preview', 'folio','name','approval_status'
     )
     search_fields = ( 'folio', 'name', 'curp', 'email')
-    list_filter = ('gender',)
+    list_filter = ('gender','approval_status')
     ordering = ('folio',)
-    readonly_fields = ('calculate_age', 'photo_preview')
+    readonly_fields = ('folio', 'age', 'age_segment', 'photo_preview', 'approval_status')
+    inlines = [PreregisterContactInline]
 
-    def calculate_age(self, obj):
-        """Method to calculate the member's age based on their birth date."""
-        if obj.birth_date:
-            today = timezone.now().date()
-            age = today.year - obj.birth_date.year
-            if today.month < obj.birth_date.month or (
-                today.month == obj.birth_date.month and today.day < obj.birth_date.day
-            ):
-                age -= 1
-            return age
-        return _("Not available")
-
-    calculate_age.short_description = _('Age')
+    def get_queryset(self, request):
+        """
+        Modifica el queryset por defecto para mostrar solo los preregistros con estado 'Pending'.
+        """
+        queryset = super().get_queryset(request)
+        return queryset.filter(approval_status='PENDING')  # Filtra por estado Pending
 
     def photo_preview(self, obj):
         """Method to display a photo preview in the admin."""
@@ -36,25 +35,12 @@ class PreregisterAdmin(admin.ModelAdmin):
 
     photo_preview.short_description = _('Photo Preview')
 
-    #def save_model(self, request, obj, form, change):
-    #    # Guarda el objeto Member primero para asignar un ID
-    #    super().save_model(request, obj, form, change)
-#
-    #    # Realiza validaciones relacionadas después de guardar
-    #    primary_contacts = obj.contacts.filter(is_primary=True)
-    #    emergency_contacts = obj.contacts.filter(is_emergency=True)
-#
-    #    if primary_contacts.count() != 1:
-    #        raise ValueError(_("There must be exactly one primary contact."))
-    #    if emergency_contacts.count() != 1:
-    #        raise ValueError(_("There must be exactly one emergency contact."))
-
     # Fieldsets for grouping fields in the admin form
     fieldsets = (
         (_('General Information'), {
             'fields': (
-                'photo_preview','photo', 'member', 'name', 'curp', 'email', 'phone_number',
-                'gender', 'birth_date', 'calculate_age'
+                'approval_status','photo_preview','photo', 'folio', 'name', 'curp', 'email', 'phone_number',
+                'gender', 'birth_date', 'age', 'age_segment'
             ),
         }),
         (_('Health Conditions'), {

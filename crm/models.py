@@ -12,6 +12,13 @@ class DiscoverySource(models.Model):
 
     def __str__(self):
         return self.name
+    
+class MedicalCondition(models.Model):
+    """Model to represent discovery sources of the members (e.g., social media)."""
+    name = models.CharField(max_length=100, unique=True, verbose_name=_("Condition Name"))
+
+    def __str__(self):
+        return self.name
 
 class AccessStatus(models.Model):
     """Model to represent the status of a member (Active, Inactive, Temporarily Inactive)."""
@@ -24,12 +31,10 @@ class AccessStatus(models.Model):
     def __str__(self):
         return self.name
 
-class Member(models.Model):
-    """Model representing a member of the academy or club with mandatory fields."""
-    member_code = models.CharField(max_length=100, unique=True, blank=False)
+class Person(models.Model):
+    """Abstract model representing a person with common fields."""    
     name = models.CharField(max_length=255, blank=False)
-    curp = models.CharField(max_length=18, unique=True, blank=False)
-    enrollment_date = models.DateField(auto_now_add=True, blank=True)
+    curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(blank=False)
     
     gender_choices = [
@@ -41,53 +46,74 @@ class Member(models.Model):
     phone_number = models.CharField(max_length=15, blank=False)
     email = models.EmailField(blank=False)
     photo = models.ImageField(upload_to='members_photos/', blank=False)
-    how_did_you_hear = models.ForeignKey(DiscoverySource, on_delete=models.SET_NULL, null=True, blank=False, related_name='member_sources')
-    how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)
-    
-    # Health-related boolean fields
+
+    # Campos relacionados con la salud
     has_illness = models.BooleanField(default=False, blank=False, verbose_name=_("Has any illness"))
     has_allergy = models.BooleanField(default=False, blank=False, verbose_name=_("Has any allergy"))
     has_flat_feet = models.BooleanField(default=False, blank=False, verbose_name=_("Has flat feet"))
     has_heart_conditions = models.BooleanField(default=False, blank=False, verbose_name=_("Has heart conditions"))
 
+    how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
+    how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
+
+    medical_condition = models.ForeignKey('crm.MedicalCondition', on_delete=models.SET_NULL, null=True, blank=False)
+    medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
+
+    # Métodos comunes
     @property
     def age(self):
-        """Calculate the member's age based on birth_date."""
+        """Calcula la edad de la persona en base a birth_date."""
         today = date.today()
         return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
 
     @property
     def age_segment(self):
-        """Return the AgeSegment object corresponding to the member's age."""
+        """Devuelve el segmento de edad correspondiente a la persona."""
         segment = AgeSegment.objects.filter(
             min_age__lte=self.age,  
             max_age__gt=self.age
         ).first()
         return segment
 
-    def __str__(self):
-        return self.name
-
     def clean(self):
-        # Phone number validation (only digits, between 10 and 15 characters)
+        """Validaciones para los campos comunes."""
+        # Validación de número de teléfono (solo dígitos, entre 10 y 15 caracteres)
         if not re.match(r'^\d{10,15}$', self.phone_number):
             raise ValidationError(_("The phone number must contain only digits and be between 10 and 15 characters long."))
 
-        # CURP validation (Mexican CURP format)
+        # Validación de CURP (formato mexicano)
         curp_pattern = r'^[A-Z]{4}\d{6}[HM]{1}[A-Z]{5}[A-Z0-9]{2}$'
         if not re.match(curp_pattern, self.curp):
             raise ValidationError(_("The CURP must follow a valid format."))
 
-        # Call the parent's clean() method to ensure no other field validations are missed
-        super().clean()
+        super().clean()  # Llamar al método clean() de la clase base para asegurarse de que no se omitan otras validaciones
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        abstract = True
+
+
+class Member(Person):
+    """Modelo que representa a un miembro de la academia o club, hereda de Person."""
+    member_code = models.CharField(max_length=100, unique=True, blank=False)
+    enrollment_date = models.DateField(auto_now_add=True, blank=True)  # Fecha de inscripción
+    curp = models.CharField(max_length=18, unique=True, blank=False)  # Único solo en Member
+
+    @property
+    def current_status(self):
+        """Devuelve el último estado del miembro según el log más reciente."""
+        latest_log = self.statuses.order_by('-date_changed').first()
+        return latest_log.status if latest_log else None
 
     def save(self, *args, user=None, **kwargs):
-        # Save the member
+        """Método sobrecargado para guardar un miembro y crear un registro de acceso."""
         is_new = self.pk is None
-        super().save(*args, **kwargs)  # Call the base save method
+        super().save(*args, **kwargs)  # Llamar al método save() de la clase base
         
         if is_new:
-            # Only create the status log if it's a new member
+            # Solo crear el registro de log si es un miembro nuevo
             active_status = AccessStatus.objects.get(name=_("Active"))
             MemberAccessLog.objects.create(
                 member=self,
@@ -95,7 +121,6 @@ class Member(models.Model):
                 reason=_("New member"),
                 changed_by=user,
             )
-
 
 class MemberAccessLog(models.Model):
     """Model to represent the status log of a member."""
@@ -116,17 +141,30 @@ class MemberAccessLog(models.Model):
         
         super().save(*args, **kwargs)
 
-class MemberContact(models.Model):
-    """Model to represent a contact for a member."""
-    member = models.ForeignKey(Member, related_name='contacts', on_delete=models.CASCADE, blank=False)
+class ContactRelation(models.Model):
+    """Model to represent relations of the contacts to members"""
+    name = models.CharField(max_length=100, unique=True, verbose_name=_("Relation Name"))
+
+    def __str__(self):
+        return self.name
+
+class Contact(models.Model):
+    """Abstract model representing a contact with common fields."""    
     name = models.CharField(max_length=255, blank=False)
     phone_number = models.CharField(max_length=15, blank=False)
-    relation = models.CharField(max_length=100, blank=False)
+    relation = models.ForeignKey(ContactRelation, on_delete=models.SET_NULL, null=True, blank=True)
     is_primary = models.BooleanField(default=False, blank=False)
     is_emergency = models.BooleanField(default=False, blank=False)
 
     def __str__(self):
         return f"{self.name} ({self.relation})"
+
+    class Meta:
+        abstract = True
+
+class MemberContact(Contact):
+    """Model to represent a contact for a member."""
+    member = models.ForeignKey(Member, related_name='contacts', on_delete=models.CASCADE, blank=False)
 
 class AgeSegment(models.Model):
     """Model to represent age segments (e.g., baby, child, adult, senior)."""
