@@ -101,7 +101,12 @@ class Member(Person):
     enrollment_date = models.DateField(auto_now_add=True, blank=True)  # Fecha de inscripción
     curp = models.CharField(max_length=18, unique=True, blank=False)  # Único solo en Member
 
-    # Campos adicionales para el miembro
+    @property
+    def current_status(self):
+        """Devuelve el último estado del miembro según el log más reciente."""
+        latest_log = self.statuses.order_by('-date_changed').first()
+        return latest_log.status if latest_log else None
+
     def save(self, *args, user=None, **kwargs):
         """Método sobrecargado para guardar un miembro y crear un registro de acceso."""
         is_new = self.pk is None
@@ -136,17 +141,30 @@ class MemberAccessLog(models.Model):
         
         super().save(*args, **kwargs)
 
-class MemberContact(models.Model):
-    """Model to represent a contact for a member."""
-    member = models.ForeignKey(Member, related_name='contacts', on_delete=models.CASCADE, blank=False)
+class ContactRelation(models.Model):
+    """Model to represent relations of the contacts to members"""
+    name = models.CharField(max_length=100, unique=True, verbose_name=_("Relation Name"))
+
+    def __str__(self):
+        return self.name
+
+class Contact(models.Model):
+    """Abstract model representing a contact with common fields."""    
     name = models.CharField(max_length=255, blank=False)
     phone_number = models.CharField(max_length=15, blank=False)
-    relation = models.CharField(max_length=100, blank=False)
+    relation = models.ForeignKey(ContactRelation, on_delete=models.SET_NULL, null=True, blank=True)
     is_primary = models.BooleanField(default=False, blank=False)
     is_emergency = models.BooleanField(default=False, blank=False)
 
     def __str__(self):
         return f"{self.name} ({self.relation})"
+
+    class Meta:
+        abstract = True
+
+class MemberContact(Contact):
+    """Model to represent a contact for a member."""
+    member = models.ForeignKey(Member, related_name='contacts', on_delete=models.CASCADE, blank=False)
 
 class AgeSegment(models.Model):
     """Model to represent age segments (e.g., baby, child, adult, senior)."""

@@ -1,14 +1,20 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-from .models import Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus, AgeSegment, MedicalCondition
 from django import forms
+from .models import (
+    Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus,
+    AgeSegment, MedicalCondition, ContactRelation
+)
 
 admin.site.register(AccessStatus)
 admin.site.register(DiscoverySource)
 admin.site.register(AgeSegment)
 admin.site.register(MedicalCondition)
+admin.site.register(ContactRelation)
+
 
 class MemberAdminForm(forms.ModelForm):
     class Meta:
@@ -44,18 +50,32 @@ class MemberAccessLogInline(admin.TabularInline):
         return False
 
 
+class CurrentStatusFilter(SimpleListFilter):
+    title = _('Current Status')  # Título del filtro
+    parameter_name = 'current_status'  # Nombre del parámetro en la URL
+
+    def lookups(self, request, model_admin):
+        # Opciones que aparecerán en el filtro
+        statuses = AccessStatus.objects.all()
+        return [(status.id, status.name) for status in statuses]
+
+    def queryset(self, request, queryset):
+        # Filtra el queryset basado en la opción seleccionada
+        if self.value():
+            return queryset.filter(statuses__status_id=self.value()).distinct()
+        return queryset
 
 # Admin configuration for the Member model
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
     form = MemberAdminForm
     list_display = (
-        'photo_preview', 'member_code', 'name'
+        'photo_preview', 'member_code', 'name', 'current_status'
     )
     search_fields = ('member_code', 'name', 'curp', 'email')
-    list_filter = ('gender',)
+    list_filter = ('gender',CurrentStatusFilter)
     ordering = ('member_code',)
-    readonly_fields = ('enrollment_date', 'age', 'age_segment', 'photo_preview')
+    readonly_fields = ('enrollment_date', 'age', 'age_segment', 'photo_preview','current_status')
 
     # Add inlines for contacts and access logs
     inlines = [MemberContactInline, MemberAccessLogInline]
@@ -85,7 +105,7 @@ class MemberAdmin(admin.ModelAdmin):
     fieldsets = (
         (_('General Information'), {
             'fields': (
-                'photo_preview','photo', 'member_code', 'name', 'curp', 'email', 'phone_number',
+                'photo_preview','photo', 'member_code', 'name', 'current_status', 'curp', 'email', 'phone_number',
                 'gender', 'enrollment_date', 'birth_date', 'age', 'age_segment'
             ),
         }),
