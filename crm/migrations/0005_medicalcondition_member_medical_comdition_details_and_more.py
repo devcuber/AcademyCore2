@@ -8,7 +8,7 @@ def create_default_medical_conditions(apps, schema_editor):
     MedicalCondition = apps.get_model('crm', 'MedicalCondition')
     
     # Crear los registros "other" y "None" si no existen
-    MedicalCondition.objects.get_or_create(name="other")
+    MedicalCondition.objects.get_or_create(name="Other")
     MedicalCondition.objects.get_or_create(name="None")
 
 class Migration(migrations.Migration):

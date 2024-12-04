@@ -21,10 +21,6 @@ class MemberAccessLogTestCase(TestCase):
             "email": "juan.perez@example.com",
             "photo": None,
             "how_did_you_hear": None,
-            "has_illness": False,
-            "has_allergy": False,
-            "has_flat_feet": False,
-            "has_heart_conditions": False,
         }
         defaults.update(kwargs)
         return Member.objects.create(**defaults)

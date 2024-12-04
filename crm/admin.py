@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import (
     Member, MemberContact, MemberAccessLog, DiscoverySource, AccessStatus,
     AgeSegment, MedicalCondition, ContactRelation
@@ -22,18 +23,45 @@ class MemberAdminForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),  # Usa el selector de fecha nativo
+            'medical_conditions': forms.CheckboxSelectMultiple(),  # Cambiar a checkboxes
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        medical_conditions = cleaned_data.get('medical_conditions')
+        medical_condition_details = cleaned_data.get('medical_condition_details')
+
+        # Validate that at least one medical condition is selected
+        if not medical_conditions.exists():
+            raise ValidationError("You must select at least one medical condition or choose 'None'.")
+
+        # Validate the 'None' rule
+        if medical_conditions.filter(name="None").exists() and medical_conditions.count() > 1:
+            raise ValidationError("You cannot select other medical conditions if 'None' is selected.")
+
+        # Validate the 'Other' rule
+        if medical_conditions.filter(name="Other").exists() and not medical_condition_details:
+            raise ValidationError("You must provide details of the medical condition if 'Other' is selected.")
+
+        return cleaned_data
 
 # Inline model for Member contacts
 class MemberContactInline(admin.TabularInline):
     model = MemberContact
     extra = 1
+    classes = ('collapse',)
     fields = ('name', 'phone_number', 'relation', 'is_primary', 'is_emergency')
+
+class MedicalConditionInline(admin.TabularInline):  # Puedes usar StackedInline si prefieres.
+    model = Member.medical_conditions.through
+    extra = 0  # Número de filas vacías adicionales
+    can_delete = True
 
 # Inline model for Member access logs
 class MemberAccessLogInline(admin.TabularInline):
     model = MemberAccessLog
     extra = 0
+    classes = ('collapse',)
     fields = ('status', 'reason', 'changed_by', 'date_changed')
     readonly_fields = ('status', 'reason', 'changed_by', 'date_changed')  # Todos los campos son de solo lectura
 
@@ -72,6 +100,7 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = (
         'photo_preview', 'member_code', 'name', 'current_status'
     )
+    #filter_horizontal = ('medical_conditions',)
     search_fields = ('member_code', 'name', 'curp', 'email')
     list_filter = ('gender',CurrentStatusFilter)
     ordering = ('member_code',)
@@ -88,33 +117,21 @@ class MemberAdmin(admin.ModelAdmin):
 
     photo_preview.short_description = _('Photo Preview')
 
-    #def save_model(self, request, obj, form, change):
-    #    # Guarda el objeto Member primero para asignar un ID
-    #    super().save_model(request, obj, form, change)
-#
-    #    # Realiza validaciones relacionadas después de guardar
-    #    primary_contacts = obj.contacts.filter(is_primary=True)
-    #    emergency_contacts = obj.contacts.filter(is_emergency=True)
-#
-    #    if primary_contacts.count() != 1:
-    #        raise ValueError(_("There must be exactly one primary contact."))
-    #    if emergency_contacts.count() != 1:
-    #        raise ValueError(_("There must be exactly one emergency contact."))
-
     # Fieldsets for grouping fields in the admin form
     fieldsets = (
-        (_('General Information'), {
+        (_('GENERAL INFORMATION'), {
             'fields': (
                 'photo_preview','photo', 'member_code', 'name', 'current_status', 'curp', 'email', 'phone_number',
                 'gender', 'enrollment_date', 'birth_date', 'age', 'age_segment'
             ),
+            'classes': ('collapse',)
         }),
-        (_('Health Conditions'), {
-            'fields': ('has_illness', 'has_allergy', 'has_flat_feet', 'has_heart_conditions', 'medical_condition', 'medical_condition_details'),
-            'classes': ('collapse',)  # Collapse the 'Health Conditions' section
+        (_('HEALTH CONDITIONS'), {
+            'fields': ('medical_conditions', 'medical_condition_details'),
+            'classes': ('collapse',)
         }),
-        (_('Discovery Source'), {
+        (_('DISCOVERY SOURCE'), {
             'fields': ('how_did_you_hear', 'how_did_you_hear_details'),
-            'classes': ('collapse',)  # Collapse the 'Discovery Source' section
+            'classes': ('collapse',)
         }),
     )
