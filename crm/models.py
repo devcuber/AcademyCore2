@@ -48,15 +48,14 @@ class Person(models.Model):
     photo = models.ImageField(upload_to='members_photos/', blank=False)
 
     # Campos relacionados con la salud
-    has_illness = models.BooleanField(default=False, blank=False, verbose_name=_("Has any illness"))
-    has_allergy = models.BooleanField(default=False, blank=False, verbose_name=_("Has any allergy"))
-    has_flat_feet = models.BooleanField(default=False, blank=False, verbose_name=_("Has flat feet"))
-    has_heart_conditions = models.BooleanField(default=False, blank=False, verbose_name=_("Has heart conditions"))
+    #has_illness = models.BooleanField(default=False, blank=False, verbose_name=_("Has any illness"))
+    #has_allergy = models.BooleanField(default=False, blank=False, verbose_name=_("Has any allergy"))
+    #has_flat_feet = models.BooleanField(default=False, blank=False, verbose_name=_("Has flat feet"))
+    #has_heart_conditions = models.BooleanField(default=False, blank=False, verbose_name=_("Has heart conditions"))
 
     how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
     how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
 
-    medical_condition = models.ForeignKey('crm.MedicalCondition', on_delete=models.SET_NULL, null=True, blank=False)
     medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
 
     # Métodos comunes
@@ -100,6 +99,10 @@ class Member(Person):
     member_code = models.CharField(max_length=100, unique=True, blank=False)
     enrollment_date = models.DateField(auto_now_add=True, blank=True)  # Fecha de inscripción
     curp = models.CharField(max_length=18, unique=True, blank=False)  # Único solo en Member
+    medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True)
+
+    def __str__(self):
+        return f"({self.member_code}) {self.name}" 
 
     @property
     def current_status(self):
