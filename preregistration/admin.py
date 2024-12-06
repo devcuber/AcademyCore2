@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import Preregister,PreRegisterContact
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 from django.utils.safestring import mark_safe
+from .forms import PreRegisterAdminForm
 
 class PreregisterContactInline(admin.TabularInline):
     model = PreRegisterContact
@@ -11,6 +11,7 @@ class PreregisterContactInline(admin.TabularInline):
 
 @admin.register(Preregister)
 class PreregisterAdmin(admin.ModelAdmin):
+    form = PreRegisterAdminForm
     list_display = (
         'photo_preview', 'folio','name','approval_status'
     )
@@ -43,9 +44,9 @@ class PreregisterAdmin(admin.ModelAdmin):
                 'gender', 'birth_date', 'age', 'age_segment'
             ),
         }),
-        (_('Health Conditions'), {
-            'fields': ('has_illness', 'has_allergy', 'has_flat_feet', 'has_heart_conditions'),
-            'classes': ('collapse',)  # Collapse the 'Health Conditions' section
+        (_('HEALTH CONDITIONS'), {
+            'fields': ('medical_conditions', 'medical_condition_details'),
+            'classes': ('collapse',)
         }),
         (_('Discovery Source'), {
             'fields': ('how_did_you_hear', 'how_did_you_hear_details'),
