@@ -73,3 +73,19 @@ class PreRegisterPublicForm(forms.ModelForm):
                 _("The CURP must follow a valid format.")
             )
         return curp
+
+    def clean_medical_conditions(self):
+        medical_conditions = self.cleaned_data.get('medical_conditions')
+
+        # Asegurarse de que al menos una condición sea seleccionada
+        if not medical_conditions or len(medical_conditions) == 0:
+            raise forms.ValidationError(_("You must select at least one medical condition."))
+
+        # Verificar si "None" está seleccionada junto con otras
+        none_condition = MedicalCondition.objects.filter(name__iexact="None").first()
+        if none_condition and none_condition in medical_conditions and len(medical_conditions) > 1:
+            raise forms.ValidationError(
+                _("You cannot select 'None' alongside other medical conditions.")
+            )
+
+        return medical_conditions
