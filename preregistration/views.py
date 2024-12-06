@@ -11,10 +11,6 @@ from .forms import PreRegisterPublicForm
 class PreregisterCreateView(CreateView):
     model = Preregister
     form_class = PreRegisterPublicForm
-    #fields = [
-    #    'name', 'curp', 'birth_date', 'gender', 'phone_number', 'email', 
-    #    'photo', 'how_did_you_hear', 'how_did_you_hear_details'
-    #]
     template_name = 'preregistration/preregister_form.html'  # El nombre de la plantilla HTML
     success_url = reverse_lazy('preregister_success')  # Redirige tras guardar
 
@@ -72,3 +68,6 @@ class PreregisterSuccessView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['folio'] = self.request.GET.get('folio')  # Extrae el folio de la URL
         return context
+
+class TermsAndConditionsView(TemplateView):
+    template_name = 'preregistration/terms_and_conditions.html'

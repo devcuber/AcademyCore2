@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class PreRegisterAdminForm(forms.ModelForm):
     class Meta:
         model = Preregister
-        fields = '__all__'
+        fields = '__all__'        
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),  # Usa el selector de fecha nativo
             'medical_conditions': forms.CheckboxSelectMultiple(),  # Cambiar a checkboxes
@@ -35,6 +35,11 @@ class PreRegisterAdminForm(forms.ModelForm):
     
 class PreRegisterPublicForm(forms.ModelForm):
 
+    accept_terms = forms.BooleanField(
+        required=True,
+        label=_('I accept the Terms and Conditions'),
+        error_messages={'required': _('You must accept the Terms and Conditions to continue.')}
+    )
     medical_conditions = forms.ModelMultipleChoiceField(
         queryset=MedicalCondition.objects.all(),
         required=False,

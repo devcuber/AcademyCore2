@@ -316,6 +316,23 @@
                 </div>
             </div>
 
+            <div class="section-card">
+                <div class="form-group">
+                    <label>
+                        {{ form.accept_terms }}
+                        I accept the 
+                        <a href="/preregister/terms-and-conditions/" target="_blank">Terms and Conditions</a>.
+                    </label>
+                    {% if form.accept_terms.errors %}
+                        <div class="error">
+                            {% for error in form.accept_terms.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
             <!-- Botón de Enviar -->
             <button type="submit">Submit</button>
         </form>

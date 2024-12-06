@@ -43,6 +43,7 @@ class PreRegisterMedicalConditionTests(TestCase):
             'emergency_contact_relation': self.relation_sibling.id,
             'how_did_you_hear': self.social_media,
             'how_did_you_hear_details': 'Social Media',
+            'accept_terms' : True,
         }
 
     def test_valid_form_single_medical_condition(self):
