@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import Preregister,PreRegisterContact
+from .actions import convert_to_member, cancel_preregisters
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.db.models import Case, When, IntegerField
 from .forms import PreRegisterAdminForm
 
 class PreregisterContactInline(admin.TabularInline):
@@ -12,21 +14,15 @@ class PreregisterContactInline(admin.TabularInline):
 @admin.register(Preregister)
 class PreregisterAdmin(admin.ModelAdmin):
     form = PreRegisterAdminForm
+    actions = [convert_to_member, cancel_preregisters]  # Agrega la acción personalizada
     list_display = (
         'photo_preview', 'folio','name','approval_status'
     )
     search_fields = ( 'folio', 'name', 'curp', 'email')
-    list_filter = ('gender','approval_status')
+    list_filter = ('approval_status',)
     ordering = ('folio',)
     readonly_fields = ('folio', 'age', 'age_segment', 'photo_preview', 'approval_status')
     inlines = [PreregisterContactInline]
-
-    def get_queryset(self, request):
-        """
-        Modifica el queryset por defecto para mostrar solo los preregistros con estado 'Pending'.
-        """
-        queryset = super().get_queryset(request)
-        return queryset.filter(approval_status='PENDING')  # Filtra por estado Pending
 
     def photo_preview(self, obj):
         """Method to display a photo preview in the admin."""
