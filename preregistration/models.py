@@ -7,6 +7,7 @@ class Preregister(Person):
     """Model representing a pre register member of the academy or club with mandatory fields."""
     folio = models.CharField(max_length=100, unique=True, blank=True, editable=False)
     member = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=False, related_name='member')
+    medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True)
     STATUS_CHOICES = [
         ('PENDING', _('Pending')),
         ('DONE', _('Done')),
