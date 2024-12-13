@@ -58,7 +58,7 @@ class PreRegisterPublicForm(forms.ModelForm):
     class Meta:
         model = Preregister
         fields = [
-            'name', 'curp', 'birth_date', 'gender', 'phone_number', 'email',
+            'last_name','second_last_name','name', 'curp', 'birth_date', 'gender', 'phone_number', 'email', 'accept_terms',
             'photo', 'how_did_you_hear', 'how_did_you_hear_details', 'medical_condition_details'
         ]
 

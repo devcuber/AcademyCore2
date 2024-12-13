@@ -3,7 +3,6 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 class DiscoverySource(models.Model):
@@ -34,6 +33,8 @@ class AccessStatus(models.Model):
 class Person(models.Model):
     """Abstract model representing a person with common fields."""    
     name = models.CharField(max_length=255, blank=False)
+    last_name = models.CharField(max_length=255, blank=False)
+    second_last_name = models.CharField(max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(blank=False)
     
@@ -105,7 +106,9 @@ class Member(Person):
     def save(self, *args, user=None, **kwargs):
         """Método sobrecargado para guardar un miembro y crear un registro de acceso."""
         is_new = self.pk is None
-        super().save(*args, **kwargs)  # Llamar al método save() de la clase base
+        if is_new:
+            self.member_code = self.generate_member_code()
+        super().save(*args, **kwargs)
         
         if is_new:
             # Solo crear el registro de log si es un miembro nuevo
@@ -116,6 +119,23 @@ class Member(Person):
                 reason=_("New member"),
                 changed_by=user,
             )
+    def generate_member_code(self):
+        """Genera un nuevo member_code secuencial comenzando desde 5000."""
+        MIN_CODE = 5000
+        
+        # Obtener todos los códigos actuales y ordenarlos
+        existing_codes = Member.objects.values_list('member_code', flat=True)
+        existing_codes = [int(code) for code in existing_codes if code.isdigit() and int(code) >= MIN_CODE]
+        existing_codes.sort()
+        
+        # Buscar el primer hueco en la secuencia
+        new_code = MIN_CODE
+        for code in existing_codes:
+            if new_code < code:
+                break
+            new_code += 1
+        
+        return str(new_code).zfill(4)
 
 class MemberAccessLog(models.Model):
     """Model to represent the status log of a member."""

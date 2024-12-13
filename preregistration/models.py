@@ -6,8 +6,11 @@ from django.utils.translation import gettext_lazy as _
 class Preregister(Person):
     """Model representing a pre register member of the academy or club with mandatory fields."""
     folio = models.CharField(max_length=100, unique=True, blank=True, editable=False)
-    member = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=False, related_name='member')
+    member = models.OneToOneField(Member, on_delete=models.SET_NULL, null=True, blank=False, related_name='preregister')
     medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
+    accept_terms = models.BooleanField(default=False, verbose_name=_("Accepted Terms and Conditions"))
+    
     STATUS_CHOICES = [
         ('PENDING', _('Pending')),
         ('DONE', _('Done')),
