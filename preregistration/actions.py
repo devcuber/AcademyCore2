@@ -67,9 +67,7 @@ def create_member_from_preregister(preregister):
         how_did_you_hear=preregister.how_did_you_hear,
         how_did_you_hear_details=preregister.how_did_you_hear_details,
         medical_condition_details=preregister.medical_condition_details,
-        member_code=f"MEM-{uuid.uuid4().hex[:6].upper()}"
     )
-
 
 def assign_medical_conditions(new_member, preregister):
     """Asigna las condiciones médicas al nuevo miembro."""
@@ -116,6 +114,5 @@ def send_messages(modeladmin, request, converted_count, skipped_count):
             f"{skipped_count} PreRegisters omitidos debido a CURPs duplicados.",
             level=messages.WARNING
         )
-
 
 convert_to_member.short_description = _("Convert selected items to Members")

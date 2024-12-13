@@ -15,8 +15,7 @@ admin.site.register(DiscoverySource)
 admin.site.register(AgeSegment)
 admin.site.register(MedicalCondition)
 admin.site.register(ContactRelation)
-
-
+                
 class MemberAdminForm(forms.ModelForm):
     class Meta:
         model = Member
@@ -63,11 +62,7 @@ class MemberAccessLogInline(admin.TabularInline):
     extra = 0
     classes = ('collapse',)
     fields = ('status', 'reason', 'changed_by', 'date_changed')
-    readonly_fields = ('status', 'reason', 'changed_by', 'date_changed')  # Todos los campos son de solo lectura
-
-    def has_add_permission(self, request, obj=None):
-        # No se permite agregar nuevos logs desde el inline
-        return False
+    readonly_fields = ('changed_by', 'date_changed')  
 
     def has_change_permission(self, request, obj=None):
         # No se permite editar los logs existentes
@@ -76,7 +71,6 @@ class MemberAccessLogInline(admin.TabularInline):
     def has_delete_permission(self, request, obj=None):
         # No se permite eliminar logs
         return False
-
 
 class CurrentStatusFilter(SimpleListFilter):
     title = _('Current Status')  # Título del filtro
@@ -98,17 +92,14 @@ class CurrentStatusFilter(SimpleListFilter):
 class MemberAdmin(admin.ModelAdmin):
     form = MemberAdminForm
     list_display = (
-        'photo_preview', 'member_code', 'name', 'current_status'
+        'photo_preview', 'member_code', 'last_name', 'second_last_name', 'name', 'phone_number', 'current_status'
     )
-    #filter_horizontal = ('medical_conditions',)
-    search_fields = ('member_code', 'name', 'curp', 'email')
+    search_fields = ('member_code', 'last_name', 'second_last_name','name', 'curp', 'email', 'phone_number')
     list_filter = ('gender',CurrentStatusFilter)
     ordering = ('member_code',)
-    readonly_fields = ('enrollment_date', 'age', 'age_segment', 'photo_preview','current_status')
-
+    readonly_fields = ('member_code','enrollment_date', 'age', 'age_segment', 'photo_preview','current_status')
     # Add inlines for contacts and access logs
     inlines = [MemberContactInline, MemberAccessLogInline]
-
     def photo_preview(self, obj):
         """Method to display a photo preview in the admin."""
         if obj.photo:
@@ -121,8 +112,9 @@ class MemberAdmin(admin.ModelAdmin):
     fieldsets = (
         (_('GENERAL INFORMATION'), {
             'fields': (
-                'photo_preview','photo', 'member_code', 'name', 'current_status', 'curp', 'email', 'phone_number',
-                'gender', 'enrollment_date', 'birth_date', 'age', 'age_segment'
+                'photo_preview','photo', 'member_code', 'last_name', 'second_last_name', 'name', 
+                'current_status', 'curp', 'email', 'phone_number','gender', 'enrollment_date', 
+                'birth_date', 'age', 'age_segment'
             ),
             'classes': ('collapse',)
         }),

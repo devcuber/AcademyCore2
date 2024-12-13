@@ -41,11 +41,11 @@ class ProductInline(admin.TabularInline):  # TabularInline muestra la relación 
     verbose_name_plural = _("Products")  # Plural
     classes = ('collapse',)
 
-class CustomMemberAdmin(MemberAdmin):
-    #ProductInline en la penultima posición, respetando los access_logs en la última posición
-    inlines = MemberAdmin.inlines[:-1] + [ProductInline] + MemberAdmin.inlines[-1:]
-    class Media:
-        js = ('js/filter_products.js',)
-
-admin.site.unregister(Member)
-admin.site.register(Member, CustomMemberAdmin)
+#class CustomMemberAdmin(MemberAdmin):
+#    #ProductInline en la penultima posición, respetando los access_logs en la última posición
+#    inlines = MemberAdmin.inlines[:-1] + [ProductInline] + MemberAdmin.inlines[-1:]
+#    class Media:
+#        js = ('js/filter_products.js',)
+#
+#admin.site.unregister(Member)
+#admin.site.register(Member, CustomMemberAdmin)
