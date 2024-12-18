@@ -28,3 +28,10 @@ class Preregister(Person):
 class PreRegisterContact(Contact):
     """Model to represent a contact for a member."""
     preregister = models.ForeignKey(Preregister, related_name='preregisters', on_delete=models.CASCADE, blank=False)
+
+class TermsAndConditions(models.Model): 
+    title = models.CharField(max_length=255, default='Términos y Condiciones') 
+    pdf = models.FileField(upload_to='terms_and_conditions/') 
+    
+    def __str__(self): 
+        return self.title
