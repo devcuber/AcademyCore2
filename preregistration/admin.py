@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html 
 from django.urls import reverse
 from crm.models import Member
-from .models import Preregister,PreRegisterContact
+from .models import Preregister,PreRegisterContact, TermsAndConditions
 from .actions import convert_to_member, cancel_preregisters
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
@@ -76,3 +76,8 @@ class CustomMemberAdmin(MemberAdmin):
 
 admin.site.unregister(Member)
 admin.site.register(Member, CustomMemberAdmin)
+
+class TermsAndConditionsAdmin(admin.ModelAdmin): 
+    list_display = ['title'] 
+    fields = ['pdf'] 
+admin.site.register(TermsAndConditions, TermsAndConditionsAdmin)

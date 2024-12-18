@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-from .models import Preregister, PreRegisterContact
+from .models import Preregister, PreRegisterContact, TermsAndConditions
 from crm.models import MedicalCondition, ContactRelation
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse, Http404
 from .forms import PreRegisterPublicForm
 
 class PreregisterCreateView(CreateView):
@@ -70,4 +70,13 @@ class PreregisterSuccessView(TemplateView):
         return context
 
 class TermsAndConditionsView(TemplateView):
-    template_name = 'preregistration/terms_and_conditions.html'
+    #template_name = 'preregistration/terms_and_conditions.html'
+    def get(self, request, *args, **kwargs): 
+        try: 
+            terms = TermsAndConditions.objects.first() 
+            if not terms or not terms.pdf: 
+                raise Http404("Terms and Conditions not found.") 
+            return FileResponse(terms.pdf.open(), content_type='application/pdf') 
+        except TermsAndConditions.DoesNotExist: 
+            raise Http404("Terms and Conditions not found.")
+
