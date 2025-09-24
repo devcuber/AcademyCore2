@@ -1,5 +1,7 @@
 # Entornos virtuales
 venv/
+.venv/
+
 __pycache__/
 
 # Configuración de sistema

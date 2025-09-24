@@ -17,6 +17,11 @@ class Preregister(Person):
         ('CANCELED', _('Canceled')),
     ]
     approval_status = models.CharField(max_length=10,choices=STATUS_CHOICES,default='PENDING',verbose_name=_("approval status"))
+    
+    class Meta:
+        verbose_name = _("Pre-register")
+        verbose_name_plural = _("Pre-registers")
+    
     def __str__(self):
         return self.name
 
@@ -29,9 +34,17 @@ class PreRegisterContact(Contact):
     """Model to represent a contact for a member."""
     preregister = models.ForeignKey(Preregister, related_name='preregisters', on_delete=models.CASCADE, blank=False)
 
+    class Meta:
+        verbose_name = _("Pre-register Contact")
+        verbose_name_plural = _("Pre-register Contacts")
+
 class TermsAndConditions(models.Model): 
     title = models.CharField(max_length=255, default='Términos y Condiciones') 
     pdf = models.FileField(upload_to='terms_and_conditions/') 
     
+    class Meta:
+        verbose_name = _("Terms and Conditions")
+        verbose_name_plural = _("Terms and Conditions")
+        
     def __str__(self): 
         return self.title

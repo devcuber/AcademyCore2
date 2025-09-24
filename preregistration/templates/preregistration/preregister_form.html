@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-register</title>
+    <title>{% trans "Pre-register" %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +12,6 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             width: 100%;
             max-width: 600px;
@@ -21,21 +21,18 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         h1 {
             text-align: center;
             color: #333;
             font-size: 24px;
             margin-bottom: 20px;
         }
-
         label {
             font-size: 16px;
             color: #555;
             margin-bottom: 5px;
             display: block;
         }
-
         input[type="text"], input[type="email"], input[type="date"], input[type="file"], select, textarea {
             width: 100%;
             padding: 10px;
@@ -44,7 +41,6 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-
         button {
             background-color: #4CAF50;
             color: white;
@@ -55,11 +51,9 @@
             width: 100%;
             font-size: 16px;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
         .section-card {
             background-color: #f9f9f9;
             padding: 20px;
@@ -67,32 +61,27 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .section-title {
             font-size: 18px;
             color: #333;
             margin-bottom: 10px;
             font-weight: bold;
         }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         .error {
             color: red;
             font-size: 12px;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Pre-register Form</h1>
+        <h1>{% trans "Pre-register Form" %}</h1>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
-            <!-- Información General -->
             {% if form.non_field_errors %}
             <div class="error">
                 {% for error in form.non_field_errors %}
@@ -100,264 +89,57 @@
                 {% endfor %}
             </div>
             {% endif %}
+
             <div class="section-card">
-                <div class="section-title">Personal Information</div>
+                <div class="section-title">{% trans "Personal Information" %}</div>
+
                 <div class="form-group">
-                    <label for="id_last_name">Last Name</label>
+                    <label for="id_last_name">{% trans "Last Name" %}</label>
                     {{ form.last_name }}
-                    {% if form.last_name.errors %}
-                        <div class="error">
-                            {% for error in form.last_name.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
+
                 <div class="form-group">
-                    <label for="id_second_last_name">Second last name</label>
+                    <label for="id_second_last_name">{% trans "Second last name" %}</label>
                     {{ form.second_last_name }}
-                    {% if form.second_last_name.errors %}
-                        <div class="error">
-                            {% for error in form.second_last_name.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
+
                 <div class="form-group">
-                    <label for="id_name">Name</label>
+                    <label for="id_name">{% trans "Name" %}</label>
                     {{ form.name }}
-                    {% if form.name.errors %}
-                        <div class="error">
-                            {% for error in form.name.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
 
                 <div class="form-group">
-                    <label for="id_photo">Photo</label>
+                    <label for="id_photo">{% trans "Photo" %}</label>
                     {{ form.photo }}
-                    {% if form.photo.errors %}
-                        <div class="error">
-                            {% for error in form.photo.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="id_curp">CURP</label>
+                    <label for="id_curp">{% trans "CURP" %}</label>
                     {{ form.curp }}
-                    {% if form.curp.errors %}
-                        <div class="error">
-                            {% for error in form.curp.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="id_birth_date">Birth Date</label>
+                    <label for="id_birth_date">{% trans "Birth Date" %}</label>
                     <input type="date" name="birth_date" id="id_birth_date" required>
-                    {% if form.birth_date.errors %}
-                        <div class="error">
-                            {% for error in form.birth_date.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>            
+                </div>
 
                 <div class="form-group">
-                    <label for="id_gender">Gender</label>
+                    <label for="id_gender">{% trans "Gender" %}</label>
                     {{ form.gender }}
-                    {% if form.gender.errors %}
-                        <div class="error">
-                            {% for error in form.gender.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
 
                 <div class="form-group">
-                    <label for="id_phone_number">Phone Number</label>
+                    <label for="id_phone_number">{% trans "Phone Number" %}</label>
                     {{ form.phone_number }}
-                    {% if form.phone_number.errors %}
-                        <div class="error">
-                            {% for error in form.phone_number.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
 
                 <div class="form-group">
-                    <label for="id_email">Email</label>
+                    <label for="id_email">{% trans "Email" %}</label>
                     {{ form.email }}
-                    {% if form.email.errors %}
-                        <div class="error">
-                            {% for error in form.email.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Información de Contactos -->
-            <div class="section-card">
-                <div class="section-title">Contact Information</div>
-                <!-- Main Contact Section -->
-                <div class="form-group">
-                    <label>Main Contact</label>
-                    {% if form.main_contact_name.errors %}
-                        <div class="error">
-                            {% for error in form.main_contact_name.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <input type="text" name="main_contact_name" placeholder="Contact Name">
-                    {% if form.main_contact_phone.errors %}
-                        <div class="error">
-                            {% for error in form.main_contact_phone.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <input type="text" name="main_contact_phone" placeholder="Phone Number">
-                    {% if form.main_contact_relation.errors %}
-                        <div class="error">
-                            {% for error in form.main_contact_relation.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <select name="main_contact_relation" id="id_main_contact_relation">
-                        <option value="">Select Relation</option>
-                        {% for relation in contact_relations %}
-                            <option value="{{ relation.id }}" {% if relation.id == form.main_contact_relation.value %}selected{% endif %}>
-                                {{ relation.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <!-- Emergency Contact Section -->
-                <div class="form-group">
-                    <label>Emergency Contact</label>
-                    {% if form.emergency_contact_name.errors %}
-                        <div class="error">
-                            {% for error in form.emergency_contact_name.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <input type="text" name="emergency_contact_name" placeholder="Contact Name">
-                    {% if form.emergency_contact_phone.errors %}
-                        <div class="error">
-                            {% for error in form.emergency_contact_phone.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}    
-                    <input type="text" name="emergency_contact_phone" placeholder="Phone Number">
-                    {% if form.emergency_contact_relation.errors %}
-                        <div class="error">
-                            {% for error in form.emergency_contact_relation.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}  
-                    <select name="emergency_contact_relation" id="id_emergency_contact_relation">
-                        <option value="">Select Relation</option>
-                        {% for relation in contact_relations %}
-                            <option value="{{ relation.id }}" {% if relation.id == form.emergency_contact_relation.value %}selected{% endif %}>
-                                {{ relation.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-
-            <!-- Información Médica -->
-            <div class="section-card">
-                <div class="section-title">Medical Information</div>
-                <label>Medical Conditions</label>
-                <div id="medical-conditions">
-                    {% for condition in medical_conditions %}
-                        <label>
-                            <input type="checkbox" name="medical_conditions" value="{{ condition.id }}"> 
-                            {{ condition.name }}
-                        </label><br>
-                    {% endfor %}
-                </div>
-                <div class="form-group">
-                    <label for="id_medical_condition_details">Medical Condition Details</label>
-                    <textarea name="medical_condition_details" id="id_medical_condition_details" rows="4" placeholder="Please provide additional details if you think it is necessary ..."></textarea>
-                    {% if form.medical_condition_details.errors %}
-                        <div class="error">
-                            {% for error in form.medical_condition_details.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Información de Cómo se Enteraron -->
-            <div class="section-card">
-                <div class="section-title">Referral Source</div>
-                <div class="form-group">
-                    <label for="id_how_did_you_hear">How did you hear about us?</label>
-                    {{ form.how_did_you_hear }}
-                    {% if form.how_did_you_hear.errors %}
-                        <div class="error">
-                            {% for error in form.how_did_you_hear.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    <label for="id_how_did_you_hear_details">Details</label>
-                    {{ form.how_did_you_hear_details }}
-                    {% if form.how_did_you_hear_details.errors %}
-                        <div class="error">
-                            {% for error in form.how_did_you_hear_details.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
 
             <div class="section-card">
+                <div class="section-title">{% trans "Contact Information" %}</div>
                 <div class="form-group">
-                    <label>
-                        {{ form.accept_terms }}
-                        I accept the 
-                        <a href="/preregister/terms-and-conditions/" target="_blank">Terms and Conditions</a>.
-                    </label>
-                    {% if form.accept_terms.errors %}
-                        <div class="error">
-                            {% for error in form.accept_terms.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-            
-            <!-- Botón de Enviar -->
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-</body>
-</html>
+                    <label>{% trans "Main Contact" %}</la

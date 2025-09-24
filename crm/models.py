@@ -8,16 +8,28 @@ from django.utils.translation import gettext_lazy as _
 class DiscoverySource(models.Model):
     """Model to represent discovery sources of the members (e.g., social media)."""
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Source Name"))
+    
+    class Meta:
+        verbose_name = _("Discovery Source")
+        verbose_name_plural = _("Discovery Sources")
+        ordering = ['name']
 
     def __str__(self):
         return self.name
     
+
 class MedicalCondition(models.Model):
-    """Model to represent discovery sources of the members (e.g., social media)."""
+    """Model to represent medical conditions of the members."""
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Condition Name"))
+
+    class Meta:
+        verbose_name = _("Medical Condition")
+        verbose_name_plural = _("Medical Conditions")
+        ordering = ['name']
 
     def __str__(self):
         return self.name
+
 
 class AccessStatus(models.Model):
     """Model to represent the status of a member (Active, Inactive, Temporarily Inactive)."""
@@ -26,9 +38,11 @@ class AccessStatus(models.Model):
     class Meta:
         verbose_name = _("Access Status")
         verbose_name_plural = _("Access Statuses")
+        ordering = ['name']
 
     def __str__(self):
         return self.name
+
 
 class Person(models.Model):
     """Abstract model representing a person with common fields."""    
@@ -50,7 +64,6 @@ class Person(models.Model):
     how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
     how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
     medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
-
     # Métodos comunes
     @property
     def age(self):
@@ -72,12 +85,11 @@ class Person(models.Model):
         # Validación de número de teléfono (solo dígitos, entre 10 y 15 caracteres)
         if not re.match(r'^\d{10,15}$', self.phone_number):
             raise ValidationError(_("The phone number must contain only digits and be between 10 and 15 characters long."))
-
+        
         # Validación de CURP (formato mexicano)
         curp_pattern = r'^[A-Z]{4}\d{6}[HM]{1}[A-Z]{5}[A-Z0-9]{2}$'
         if not re.match(curp_pattern, self.curp):
             raise ValidationError(_("The CURP must follow a valid format."))
-
         super().clean()  # Llamar al método clean() de la clase base para asegurarse de que no se omitan otras validaciones
 
     def __str__(self):
@@ -93,6 +105,11 @@ class Member(Person):
     enrollment_date = models.DateField(auto_now_add=True, blank=True)  # Fecha de inscripción
     curp = models.CharField(max_length=18, unique=True, blank=False)  # Único solo en Member
     medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True)
+
+    class Meta:
+        verbose_name = _("Member")
+        verbose_name_plural = _("Members")
+        ordering = ['member_code']
 
     def __str__(self):
         return f"({self.member_code}) {self.name}" 
@@ -112,39 +129,42 @@ class Member(Person):
         
         if is_new:
             # Solo crear el registro de log si es un miembro nuevo
-            active_status = AccessStatus.objects.get(name=_("Active"))
+            active_status = AccessStatus.objects.get(name=_("Activo"))
             MemberAccessLog.objects.create(
                 member=self,
                 status=active_status,
                 reason=_("New member"),
                 changed_by=user,
             )
+
     def generate_member_code(self):
         """Genera un nuevo member_code secuencial comenzando desde 5000."""
         MIN_CODE = 5000
-        
         # Obtener todos los códigos actuales y ordenarlos
         existing_codes = Member.objects.values_list('member_code', flat=True)
         existing_codes = [int(code) for code in existing_codes if code.isdigit() and int(code) >= MIN_CODE]
         existing_codes.sort()
-        
         # Buscar el primer hueco en la secuencia
         new_code = MIN_CODE
         for code in existing_codes:
             if new_code < code:
                 break
             new_code += 1
-        
         return str(new_code).zfill(4)
+
 
 class MemberAccessLog(models.Model):
     """Model to represent the status log of a member."""
-    
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='statuses', null=False, blank=False)
     status = models.ForeignKey(AccessStatus, on_delete=models.CASCADE, related_name='member_statuses', null=False, blank=False)
     reason = models.CharField(max_length=255, blank=False, null=False)
     changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     date_changed = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+
+    class Meta:
+        verbose_name = _("Member Access Log")
+        verbose_name_plural = _("Member Access Logs")
+        ordering = ['-date_changed']
 
     def __str__(self):
         return f"{self.member.name} - {self.status.name} - {self.date_changed}"
@@ -153,15 +173,21 @@ class MemberAccessLog(models.Model):
         """Override save method to enforce non-modifiable status."""
         if self.pk is not None:  # If the instance already exists
             raise ValidationError(_("Cannot modify an existing status. You can only add new statuses."))
-        
         super().save(*args, **kwargs)
+
 
 class ContactRelation(models.Model):
     """Model to represent relations of the contacts to members"""
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Relation Name"))
 
+    class Meta:
+        verbose_name = _("Contact Relation")
+        verbose_name_plural = _("Contact Relations")
+        ordering = ['name']
+
     def __str__(self):
         return self.name
+
 
 class Contact(models.Model):
     """Abstract model representing a contact with common fields."""    
@@ -171,15 +197,21 @@ class Contact(models.Model):
     is_primary = models.BooleanField(default=False, blank=False)
     is_emergency = models.BooleanField(default=False, blank=False)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return f"{self.name} ({self.relation})"
 
-    class Meta:
-        abstract = True
 
 class MemberContact(Contact):
     """Model to represent a contact for a member."""
     member = models.ForeignKey(Member, related_name='contacts', on_delete=models.CASCADE, blank=False)
+    class Meta:
+        verbose_name = _("Member Contact")
+        verbose_name_plural = _("Member Contacts")
+        ordering = ['member', 'name']
+
 
 class AgeSegment(models.Model):
     """Model to represent age segments (e.g., baby, child, adult, senior)."""
@@ -199,7 +231,6 @@ class AgeSegment(models.Model):
         """Ensure that min_age is less than max_age and ranges do not overlap."""
         if self.min_age >= self.max_age:
             raise ValidationError(_("Minimum age must be less than maximum age."))
-
         # Check for overlapping ranges
         overlapping_segments = AgeSegment.objects.filter(
             min_age__lt=self.max_age,  # Inicio del segmento existente < fin del segmento actual
@@ -207,12 +238,10 @@ class AgeSegment(models.Model):
         )
         if self.pk:  # Exclude the current instance when updating
             overlapping_segments = overlapping_segments.exclude(pk=self.pk)
-
         if overlapping_segments.exists():
             overlapping_segment_names = ", ".join([str(segment) for segment in overlapping_segments])
             raise ValidationError(
                 _("The age range overlaps with an existing segment: %(segment)s."),
                 params={"segment": overlapping_segment_names}
             )
-        
         super().clean()
