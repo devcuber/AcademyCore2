@@ -9,7 +9,7 @@ def create_default_statuses(apps, schema_editor):
     AccessStatus = apps.get_model("crm", "AccessStatus")
 
     # Lista de estatus predeterminados
-    default_statuses = ["Active", "Inactive"]
+    default_statuses = ["Activo", "Inactivo"]
 
     # Crear los estatus si no existen
     for status_name in default_statuses:

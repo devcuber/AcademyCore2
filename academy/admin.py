@@ -20,11 +20,11 @@ class ProductAdminForm(forms.ModelForm):
 
         # Validar que al menos un segmento de edad esté seleccionado
         if not age_segments.exists():
-            raise forms.ValidationError("You must select at least one age segment.")
+            raise forms.ValidationError(_("You must select at least one age segment."))
 
         # Validar que al menos una condición médica esté seleccionada
         if not medical_conditions.exists():
-            raise forms.ValidationError("You must select at least one medical condition.")
+            raise forms.ValidationError(_("You must select at least one medical condition."))
 
         return cleaned_data
 

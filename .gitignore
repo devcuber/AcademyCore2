@@ -1,5 +1,7 @@
 # Entornos virtuales
 venv/
+.venv/
+
 __pycache__/
 
 # Configuración de sistema
@@ -14,3 +16,9 @@ db.sqlite3
 
 # Archivos de medios
 members_photos/
+
+#Credenciales
+.env
+
+# Archivos subidos por usuarios
+/media/
