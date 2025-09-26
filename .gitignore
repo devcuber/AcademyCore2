@@ -19,3 +19,6 @@ members_photos/
 
 #Credenciales
 .env
+
+# Archivos subidos por usuarios
+/media/
