@@ -40,7 +40,7 @@ class PreregisterAdmin(admin.ModelAdmin):
     fieldsets = (
         (_('General Information'), {
             'fields': (
-                'approval_status','photo_preview','photo', 'folio', 'last_name', 'second_last_name', 'name', 'curp', 'email', 'phone_number',
+                'approval_status','photo_preview','photo', 'folio', 'last_name', 'second_last_name', 'name', 'curp', 'email', 'address', 'phone_number',
                 'gender', 'birth_date', 'age', 'age_segment'
             ),
         }),

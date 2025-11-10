@@ -58,11 +58,14 @@ def create_member_from_preregister(preregister):
     """Crea un Member basado en los datos del Preregister."""
     return Member.objects.create(
         name=preregister.name,
+        last_name=preregister.last_name,
+        second_last_name=preregister.second_last_name,
         curp=preregister.curp,
         birth_date=preregister.birth_date,
         gender=preregister.gender,
         phone_number=preregister.phone_number,
         email=preregister.email,
+        address=preregister.address,
         photo=preregister.photo,
         how_did_you_hear=preregister.how_did_you_hear,
         how_did_you_hear_details=preregister.how_did_you_hear_details,
@@ -72,7 +75,6 @@ def create_member_from_preregister(preregister):
 def assign_medical_conditions(new_member, preregister):
     """Asigna las condiciones médicas al nuevo miembro."""
     new_member.medical_conditions.set(preregister.medical_conditions.all())
-
 
 def create_member_contacts(new_member, preregister):
     """Crea los contactos del miembro desde el Preregister."""
@@ -88,13 +90,11 @@ def create_member_contacts(new_member, preregister):
         for contact in preregister.preregisters.all()
     ])
 
-
 def update_preregister_status(preregister, new_member):
     """Actualiza el Preregister, asignando el nuevo miembro y cambiando el status."""
     preregister.member = new_member
     preregister.approval_status = "DONE"
     preregister.save()
-
 
 def cancel_duplicate_preregisters(preregister):
     """Cancela otros PreRegisters con el mismo CURP y status 'PENDING'."""
@@ -102,7 +102,6 @@ def cancel_duplicate_preregisters(preregister):
         curp=preregister.curp,
         approval_status="PENDING"
     ).exclude(id=preregister.id).update(approval_status="CANCELED")
-
 
 def send_messages(modeladmin, request, converted_count, skipped_count):
     """Envía los mensajes de éxito y advertencia al usuario."""

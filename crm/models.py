@@ -51,7 +51,7 @@ class Person(models.Model):
     second_last_name = models.CharField(max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(blank=False)
-    
+    address = models.TextField(verbose_name="Dirección Completa",blank=False)
     gender_choices = [
         ('M', _('Male')),
         ('F', _('Female')),

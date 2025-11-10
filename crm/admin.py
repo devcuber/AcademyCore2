@@ -113,7 +113,7 @@ class MemberAdmin(admin.ModelAdmin):
         (_('GENERAL INFORMATION'), {
             'fields': (
                 'photo_preview','photo', 'member_code', 'last_name', 'second_last_name', 'name', 
-                'current_status', 'curp', 'email', 'phone_number','gender', 'enrollment_date', 
+                'current_status', 'curp', 'email', 'address', 'phone_number','gender', 'enrollment_date', 
                 'birth_date', 'age', 'age_segment'
             ),
             'classes': ('collapse',)
