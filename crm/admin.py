@@ -97,9 +97,20 @@ class MemberAdmin(admin.ModelAdmin):
     search_fields = ('member_code', 'last_name', 'second_last_name','name', 'curp', 'email', 'phone_number')
     list_filter = ('gender',CurrentStatusFilter)
     ordering = ('member_code',)
-    readonly_fields = ('member_code','enrollment_date', 'age', 'age_segment', 'photo_preview','current_status')
+    readonly_fields = ('member_code','enrollment_date', 'age_display', 'age_segment_display', 'photo_preview','current_status')
     # Add inlines for contacts and access logs
     inlines = [MemberContactInline, MemberAccessLogInline]
+    @admin.display(description=_("Age"))
+    def age_display(self, obj):
+        return obj.age
+
+    @admin.display(description=_("Age Segment"))
+    def age_segment_display(self, obj):
+        return obj.age_segment
+    
+    age_display.short_description = _("Age")
+    age_segment_display.short_description = _("Age Segment")
+
     def photo_preview(self, obj):
         """Method to display a photo preview in the admin."""
         if obj.photo:
@@ -114,7 +125,7 @@ class MemberAdmin(admin.ModelAdmin):
             'fields': (
                 'photo_preview','photo', 'member_code', 'last_name', 'second_last_name', 'name', 
                 'current_status', 'curp', 'email', 'phone_number','gender', 'enrollment_date', 
-                'birth_date', 'age', 'age_segment'
+                'birth_date', 'age_display', 'age_segment_display'
             ),
             'classes': ('collapse',)
         }),
@@ -126,4 +137,7 @@ class MemberAdmin(admin.ModelAdmin):
             'fields': ('how_did_you_hear', 'how_did_you_hear_details'),
             'classes': ('collapse',)
         }),
+
+
     )
+    

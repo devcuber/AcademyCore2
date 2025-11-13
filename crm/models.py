@@ -46,30 +46,33 @@ class AccessStatus(models.Model):
 
 class Person(models.Model):
     """Abstract model representing a person with common fields."""    
-    name = models.CharField(max_length=255, blank=False)
-    last_name = models.CharField(max_length=255, blank=False)
-    second_last_name = models.CharField(max_length=255, blank=False)
+    name = models.CharField(_("First name"), max_length=255, blank=False)
+    last_name = models.CharField(_("Last name"), max_length=255, blank=False)
+    second_last_name = models.CharField(_("Second last name"), max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
-    birth_date = models.DateField(blank=False)
+    birth_date = models.DateField(_("Birth date"), blank=False)
     
     gender_choices = [
         ('M', _('Male')),
         ('F', _('Female')),
         ('O', _('Other')),
     ]
-    gender = models.CharField(max_length=1, choices=gender_choices, blank=False)
-    phone_number = models.CharField(max_length=15, blank=False)
-    email = models.EmailField(blank=False)
-    photo = models.ImageField(upload_to='members_photos/', blank=False)
-    how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
-    how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
-    medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
+    gender = models.CharField(_("Gender"),max_length=1, choices=gender_choices, blank=False)
+    phone_number = models.CharField(_("Phone number"), max_length=15, blank=False)
+    email = models.EmailField(_("Email address"), blank=False)
+    photo = models.ImageField(_("Photo"), upload_to='members_photos/', blank=False)
+    how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("How did you hear about us?"))
+    how_did_you_hear_details = models.CharField(_("Additional details"), max_length=255, blank=True, null=True, help_text=_("Provide more details about how you heard about the academy."))  # Detalles de cómo se enteró de la academia
+    medical_condition_details = models.CharField(_("Medical condition details"), max_length=255, blank=True, null=True)  # Detalles condiciones medicas
     # Métodos comunes
     @property
     def age(self):
         """Calcula la edad de la persona en base a birth_date."""
         today = date.today()
         return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+
+    age.fget.short_description = _("Age")
+
 
     @property
     def age_segment(self):
@@ -79,6 +82,7 @@ class Person(models.Model):
             max_age__gt=self.age
         ).first()
         return segment
+    age_segment.fget.short_description = _("Age segment")
 
     def clean(self):
         """Validaciones para los campos comunes."""
@@ -101,10 +105,10 @@ class Person(models.Model):
 
 class Member(Person):
     """Modelo que representa a un miembro de la academia o club, hereda de Person."""
-    member_code = models.CharField(max_length=100, unique=True, blank=False)
-    enrollment_date = models.DateField(auto_now_add=True, blank=True)  # Fecha de inscripción
+    member_code = models.CharField(_("Member code"), max_length=100, unique=True, blank=False)
+    enrollment_date = models.DateField(_("Enrollment date"), auto_now_add=True, blank=True)  # Fecha de inscripción
     curp = models.CharField(max_length=18, unique=True, blank=False)  # Único solo en Member
-    medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True)
+    medical_conditions = models.ManyToManyField('crm.MedicalCondition', blank=True, verbose_name=_("Medical conditions"))
 
     class Meta:
         verbose_name = _("Member")
@@ -155,11 +159,11 @@ class Member(Person):
 
 class MemberAccessLog(models.Model):
     """Model to represent the status log of a member."""
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='statuses', null=False, blank=False)
-    status = models.ForeignKey(AccessStatus, on_delete=models.CASCADE, related_name='member_statuses', null=False, blank=False)
-    reason = models.CharField(max_length=255, blank=False, null=False)
-    changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    date_changed = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='statuses', null=False, blank=False, verbose_name= _("Member"))
+    status = models.ForeignKey(AccessStatus, on_delete=models.CASCADE, related_name='member_statuses', null=False, blank=False, verbose_name= _("Status"))
+    reason = models.CharField(_("Reason"), max_length=255, blank=False, null=False)
+    changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("Changed by"))
+    date_changed = models.DateTimeField(_("Date changed"), auto_now_add=True, null=False, blank=False)
 
     class Meta:
         verbose_name = _("Member Access Log")
@@ -191,11 +195,11 @@ class ContactRelation(models.Model):
 
 class Contact(models.Model):
     """Abstract model representing a contact with common fields."""    
-    name = models.CharField(max_length=255, blank=False)
-    phone_number = models.CharField(max_length=15, blank=False)
-    relation = models.ForeignKey(ContactRelation, on_delete=models.SET_NULL, null=True, blank=True)
-    is_primary = models.BooleanField(default=False, blank=False)
-    is_emergency = models.BooleanField(default=False, blank=False)
+    name = models.CharField(_("Name"),max_length=255, blank=False)
+    phone_number = models.CharField(_("Phone number"), max_length=15, blank=False)
+    relation = models.ForeignKey(ContactRelation, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_("Relation"))
+    is_primary = models.BooleanField(_("Primary contact"), default=False, blank=False)
+    is_emergency = models.BooleanField(_("Emergency contact"), default=False, blank=False)
 
     class Meta:
         abstract = True
