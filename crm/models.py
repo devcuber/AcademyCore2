@@ -51,7 +51,7 @@ class Person(models.Model):
     second_last_name = models.CharField(max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(blank=False)
-    address = models.TextField(verbose_name="Dirección Completa",blank=False)
+    address = models.TextField(blank=False)
     gender_choices = [
         ('M', _('Male')),
         ('F', _('Female')),
@@ -64,6 +64,19 @@ class Person(models.Model):
     how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False)
     how_did_you_hear_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles de cómo se enteró de la academia
     medical_condition_details = models.CharField(max_length=255, blank=True, null=True)  # Detalles condiciones medicas
+    weight = models.DecimalField(max_digits=5, decimal_places=2,blank=True,null=True,verbose_name=_("Weight (kg)"))
+    height = models.DecimalField(max_digits=3,decimal_places=2,blank=True,null=True,verbose_name=_("Height (m)"))
+    BLOOD_TYPE_CHOICES = [
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+    ]
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPE_CHOICES, blank=True, null=True)
     # Métodos comunes
     @property
     def age(self):

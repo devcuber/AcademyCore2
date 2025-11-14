@@ -119,7 +119,7 @@ class MemberAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         (_('HEALTH CONDITIONS'), {
-            'fields': ('medical_conditions', 'medical_condition_details'),
+            'fields': ('medical_conditions', 'medical_condition_details', 'height','weight','blood_type'),
             'classes': ('collapse',)
         }),
         (_('DISCOVERY SOURCE'), {

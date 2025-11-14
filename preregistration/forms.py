@@ -61,7 +61,8 @@ class PreRegisterPublicForm(forms.ModelForm):
             'last_name','second_last_name','name', 'curp', 
             'birth_date', 'gender', 'phone_number', 'email', 
             'address', 'accept_terms','photo', 'how_did_you_hear', 
-            'how_did_you_hear_details', 'medical_condition_details'
+            'how_did_you_hear_details', 'medical_condition_details',
+            'weight', 'height', 'blood_type'
         ]
 
     def clean_phone_number(self):

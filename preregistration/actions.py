@@ -70,6 +70,9 @@ def create_member_from_preregister(preregister):
         how_did_you_hear=preregister.how_did_you_hear,
         how_did_you_hear_details=preregister.how_did_you_hear_details,
         medical_condition_details=preregister.medical_condition_details,
+        height=preregister.height,
+        weight=preregister.weight,  
+        blood_type=preregister.blood_type
     )
 
 def assign_medical_conditions(new_member, preregister):

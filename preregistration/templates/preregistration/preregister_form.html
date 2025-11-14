@@ -37,7 +37,7 @@
             display: block;
         }
 
-        input[type="text"], input[type="email"], input[type="date"], input[type="file"], select, textarea {
+        input[type="text"], input[type="email"], input[type="date"], input[type="file"], input[type="number"],select, textarea {
             width: 100%;
             padding: 10px;
             margin: 8px 0 20px 0;
@@ -53,11 +53,29 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            width: 100%;
+            width: auto;
             font-size: 16px;
+            display: block;
+            margin: 20px auto;   
         }
 
         button:hover {
+            background-color: #45a049;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .submit-btn:hover {
             background-color: #45a049;
         }
 
@@ -329,6 +347,41 @@
             <!-- Información Médica -->
             <div class="section-card">
                 <div class="section-title">{% trans "Medical Information" %}</div>
+
+                <div class="form-group">
+                    <label for="id_weight">{% trans "Weight (kg)" %}</label>
+                    {{ form.weight }}
+                    {% if form.weight.errors %}
+                        <div class="error">
+                            {% for error in form.weight.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>                
+                <div class="form-group">
+                    <label for="id_height">{% trans "Height (m)" %}</label>
+                    {{ form.height }}
+                    {% if form.height.errors %}
+                        <div class="error">
+                            {% for error in form.height.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="id_blood_type">{% trans "Blood Type" %}</label>
+                    {{ form.blood_type }}
+                    {% if form.blood_type.errors %}
+                        <div class="error">
+                            {% for error in form.blood_type.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <label>{% trans "Medical Conditions" %}</label>
                 <div id="medical-conditions">
                     {% for condition in medical_conditions %}
@@ -354,6 +407,7 @@
             <!-- Información de Cómo se Enteraron -->
             <div class="section-card">
                 <div class="section-title">{% trans "Referral Source" %}</div>
+
                 <div class="form-group">
                     <label for="id_how_did_you_hear">{% trans "How did you hear about us?" %}</label>
                     {{ form.how_did_you_hear }}
@@ -365,27 +419,25 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
-
-            <div class="form-group">
-                    <label for="id_how_did_you_hear_details">{% trans "Details" %}</label>
-                    {{ form.how_did_you_hear_details }}
-                    {% if form.how_did_you_hear_details.errors %}
-                        <div class="error">
-                            {% for error in form.how_did_you_hear_details.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                <div class="form-group">
+                        <label for="id_how_did_you_hear_details">{% trans "Details" %}</label>
+                        {{ form.how_did_you_hear_details }}
+                        {% if form.how_did_you_hear_details.errors %}
+                            <div class="error">
+                                {% for error in form.how_did_you_hear_details.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                 </div>
             </div>
-
             <div class="section-card">
+                <div class="section-title">{% trans "Legal Agreements" %}</div>
                 <div class="form-group">
                     <label>
                         {{ form.accept_terms }}
-                        {% trans "I accept the" %} 
-                        <a href="/preregister/terms-and-conditions/" target="_blank">{% trans "Terms and Conditions" %}</a>.
+                        {% trans "I accept the" %}
+                        <a href="/preregister/terms-and-conditions/" target="_blank">{% trans "regulations, privacy notice, terms and conditions" %}</a>.
                     </label>
                     {% if form.accept_terms.errors %}
                         <div class="error">
@@ -396,9 +448,15 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="section-card">
+                <div class="section-title">{% trans "Confirmation" %}</div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">
+                        {% trans "Submit" %}
+                    </button>
+                </div>
+            </div>
             
-            <!-- Botón de Enviar -->
-            <button type="submit">{% trans "Submit" %}</button>
         </form>
     </div>
 </body>
