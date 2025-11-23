@@ -7,7 +7,6 @@ class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name=_("Nombre"))
     age_segments = models.ManyToManyField(AgeSegment, blank=True, verbose_name=_("Segmentos de edad"))
     medical_conditions = models.ManyToManyField(MedicalCondition, blank=True, verbose_name=_("Condiciones de salud"))
-    members = models.ManyToManyField(Member, blank=True, verbose_name=_("Miembros"))
 
     class Meta:
         verbose_name = _("Product")
@@ -15,3 +14,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class Instructor(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class AcademyProfile(models.Model):
+    member = models.OneToOneField(Member,on_delete=models.CASCADE,related_name="academy_profile")
+    instructor = models.ForeignKey(Instructor,on_delete=models.SET_NULL,null=True,blank=True,related_name="members")
+    product = models.ForeignKey(Product,on_delete=models.SET_NULL,null=True,blank=True,related_name="members")
+    start_time = models.TimeField(null=True, blank=True, verbose_name=_("Hora inicio"))
+    end_time = models.TimeField(null=True, blank=True, verbose_name=_("Hora fin"))
+
+    def __str__(self):
+        return f"Academy profile for {self.member.member_code}"
