@@ -37,6 +37,12 @@ class PreRegisterContact(Contact):
     class Meta:
         verbose_name = _("Pre-register Contact")
         verbose_name_plural = _("Pre-register Contacts")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['preregister', 'phone_number'],
+                name='unique_preregister_contact_phone'
+            )
+        ]
 
 class TermsAndConditions(models.Model): 
     title = models.CharField(max_length=255, default='Términos y Condiciones') 

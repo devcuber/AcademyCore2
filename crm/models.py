@@ -224,7 +224,12 @@ class MemberContact(Contact):
         verbose_name = _("Member Contact")
         verbose_name_plural = _("Member Contacts")
         ordering = ['member', 'name']
-
+        constraints = [
+            models.UniqueConstraint(
+                fields=['member', 'phone_number'],
+                name='unique_member_contact_phone'
+            )
+        ]
 
 class AgeSegment(models.Model):
     """Model to represent age segments (e.g., baby, child, adult, senior)."""
