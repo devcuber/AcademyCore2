@@ -6,6 +6,7 @@ from payments.models import MemberPaymentProfile
 
 from crm.admin import MemberAdmin as BaseMemberAdmin
 from academy.admin import AcademyProfileInline
+from preregistration.admin import PreregisterLinkInline
 
 class MemberPaymentProfileInline(admin.StackedInline):
     model = MemberPaymentProfile
@@ -16,4 +17,4 @@ admin.site.unregister(Member)
 
 @admin.register(Member)
 class MemberAdmin(BaseMemberAdmin):
-    inlines = BaseMemberAdmin.inlines + [AcademyProfileInline, MemberPaymentProfileInline]
+    inlines = BaseMemberAdmin.inlines + [PreregisterLinkInline, AcademyProfileInline, MemberPaymentProfileInline]
