@@ -1,9 +1,16 @@
+from django.db import models
+from django.forms import TimeInput
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from academy.models import Product
+from academy.models import Product, Instructor, AcademyProfile
 from django import forms
 from crm.models import Member
-from crm.admin import MemberAdmin, MemberAdminForm as BaseMemberAdminForm 
+from crm.admin import MemberAdmin as BaseMemberAdmin
+
+@admin.register(Instructor)
+class InstructorAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
 
 class ProductAdminForm(forms.ModelForm):
     class Meta:
@@ -34,18 +41,15 @@ class ProductAdmin(admin.ModelAdmin):
     exclude = ['members']
     form = ProductAdminForm
 
-class ProductInline(admin.TabularInline):  # TabularInline muestra la relación en forma de tabla
-    model = Member.product_set.through  # Tabla intermedia de la relación M2M
-    extra = 1  # Número de filas vacías para agregar nuevos productos
-    verbose_name = _("Product")  # Singular
-    verbose_name_plural = _("Products")  # Plural
-    classes = ('collapse',)
+class AcademyProfileInline(admin.StackedInline):
+    model = AcademyProfile
+    extra = 0
+    can_delete = False
+    formfield_overrides = {
+        models.TimeField: {"widget": TimeInput(format='%H:%M', attrs={"type": "time"})}
+    }
+admin.site.unregister(Member)
 
-#class CustomMemberAdmin(MemberAdmin):
-#    #ProductInline en la penultima posición, respetando los access_logs en la última posición
-#    inlines = MemberAdmin.inlines[:-1] + [ProductInline] + MemberAdmin.inlines[-1:]
-#    class Media:
-#        js = ('js/filter_products.js',)
-#
-#admin.site.unregister(Member)
-#admin.site.register(Member, CustomMemberAdmin)
+@admin.register(Member)
+class MemberAdmin(BaseMemberAdmin):
+    inlines = BaseMemberAdmin.inlines + [AcademyProfileInline]

@@ -21,8 +21,11 @@ class MemberAdminForm(forms.ModelForm):
         model = Member
         fields = '__all__'
         widgets = {
-            'birth_date': forms.DateInput(attrs={'type': 'date'}),  # Usa el selector de fecha nativo
-            'medical_conditions': forms.CheckboxSelectMultiple(),  # Cambiar a checkboxes
+            'birth_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+            'medical_conditions': forms.CheckboxSelectMultiple(),
         }
 
     def clean(self):
@@ -130,7 +133,7 @@ class MemberAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         (_('HEALTH CONDITIONS'), {
-            'fields': ('medical_conditions', 'medical_condition_details'),
+            'fields': ('medical_conditions', 'medical_condition_details', 'height','weight','blood_type'),
             'classes': ('collapse',)
         }),
         (_('DISCOVERY SOURCE'), {

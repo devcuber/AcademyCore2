@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crm',
     'preregistration',
-    'academy'
+    'academy',
+    'payments'
 ]
 
 MIDDLEWARE = [
