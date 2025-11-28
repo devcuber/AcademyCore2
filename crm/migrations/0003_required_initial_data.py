@@ -7,6 +7,7 @@ def create_required_initial_data(apps, schema_editor):
     MedicalCondition = apps.get_model('crm', 'MedicalCondition')
     ContactRelation = apps.get_model('crm', 'ContactRelation')
     AgeSegment = apps.get_model('crm', 'AgeSegment')
+    DiscoverySource = apps.get_model('crm', 'DiscoverySource')
 
     # --- AccessStatus (requeridos) ---
     required_statuses = ["Activo", "Inactivo"]
@@ -15,6 +16,7 @@ def create_required_initial_data(apps, schema_editor):
 
     # --- MedicalCondition (requerido por tu lógica de carga) ---
     MedicalCondition.objects.get_or_create(name="Ninguna")
+    MedicalCondition.objects.get_or_create(name="Otra")
 
     # --- ContactRelation (recomendados) ---
     relations = ["Padre", "Madre", "Tutor"]
@@ -35,6 +37,10 @@ def create_required_initial_data(apps, schema_editor):
             name=name,
             defaults={"min_age": min_age, "max_age": max_age},
         )
+    # --- DiscoverySource (requeridos) ---
+    sources = ["Referencia personal", "Otra"]
+    for src in sources:
+        DiscoverySource.objects.get_or_create(name=src)
 
 class Migration(migrations.Migration):
 
