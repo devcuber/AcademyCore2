@@ -16,7 +16,11 @@ class Product(models.Model):
         return self.name
 
 class Instructor(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name=_("Name"))
+
+    class Meta:
+        verbose_name = _("Instructor")
+        verbose_name_plural = _("Instructors")
 
     def __str__(self):
         return self.name
@@ -25,8 +29,12 @@ class AcademyProfile(models.Model):
     member = models.OneToOneField(Member,on_delete=models.CASCADE,related_name="academy_profile")
     instructor = models.ForeignKey(Instructor,on_delete=models.SET_NULL,null=True,blank=True,related_name="members")
     product = models.ForeignKey(Product,on_delete=models.SET_NULL,null=True,blank=True,related_name="members")
-    start_time = models.TimeField(null=True, blank=True, verbose_name=_("Hora inicio"))
-    end_time = models.TimeField(null=True, blank=True, verbose_name=_("Hora fin"))
+    start_time = models.TimeField(null=True, blank=True, verbose_name=_("Start Time"))
+    end_time = models.TimeField(null=True, blank=True, verbose_name=_("End Time"))
+
+    class Meta:
+        verbose_name = _("Academy Profile")
+        verbose_name_plural = _("Academy Profiles")
 
     def __str__(self):
         return f"Academy profile for {self.member.member_code}"

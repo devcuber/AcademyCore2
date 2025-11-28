@@ -50,7 +50,7 @@ class PreregisterLinkInline(admin.TabularInline):
 @admin.register(Preregister)
 class PreregisterAdmin(admin.ModelAdmin):
     form = PreRegisterAdminForm
-    actions = [convert_to_member, cancel_preregisters]  # Agrega la acción personalizada
+    actions = [convert_to_member, cancel_preregisters]
     list_display = (
         'photo_preview', 'folio', 'last_name', 'second_last_name', 'name', 'phone_number', 'approval_status'
     )
@@ -89,6 +89,14 @@ class PreregisterAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    def get_readonly_fields(self, request, obj=None):
+        # Todos los campos del modelo
+        readonly = [field.name for field in self.model._meta.fields]
+
+        # Además, tus campos personalizados (métodos)
+        readonly += ['photo_preview', 'age', 'age_segment']
+
+        return readonly
 
 class TermsAndConditionsAdmin(admin.ModelAdmin): 
     list_display = ['title'] 

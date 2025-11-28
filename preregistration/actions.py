@@ -118,3 +118,5 @@ def send_messages(modeladmin, request, converted_count, skipped_count):
         )
 
 convert_to_member.short_description = _("Convert selected items to Members")
+cancel_preregisters.short_description = _("Cancel selected PreRegisters")
+

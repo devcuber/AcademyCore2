@@ -17,7 +17,6 @@ class DiscoverySource(models.Model):
     def __str__(self):
         return self.name
     
-
 class MedicalCondition(models.Model):
     """Model to represent medical conditions of the members."""
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Condition Name"))
@@ -51,7 +50,7 @@ class Person(models.Model):
     second_last_name = models.CharField(_("Second last name"), max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(_("Birth date"), blank=False)
-    address = models.TextField(blank=False)
+    address = models.TextField(blank=False, verbose_name=_("Address"))
     gender_choices = [
         ('M', _('Male')),
         ('F', _('Female')),
@@ -86,7 +85,6 @@ class Person(models.Model):
 
     age.fget.short_description = _("Age")
 
-
     @property
     def age_segment(self):
         """Devuelve el segmento de edad correspondiente a la persona."""
@@ -114,7 +112,6 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
-
 
 class Member(Person):
     """Modelo que representa a un miembro de la academia o club, hereda de Person."""
