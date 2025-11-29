@@ -17,21 +17,21 @@ class PreRegisterAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         medical_conditions = cleaned_data.get('medical_conditions')
-        medical_condition_details = cleaned_data.get('medical_condition_details')
+        details = cleaned_data.get('medical_condition_details')
 
-        # Validate that at least one medical condition is selected
-        if not medical_conditions.exists():
-            raise ValidationError("You must select at least one medical condition or choose 'None'.")
+        if medical_conditions:
+            none_condition = MedicalCondition.objects.filter(name__iexact="None").first()
 
-        # Validate the 'None' rule
-        if medical_conditions.filter(name="None").exists() and medical_conditions.count() > 1:
-            raise ValidationError("You cannot select other medical conditions if 'None' is selected.")
 
-        # Validate the 'Other' rule
-        if medical_conditions.filter(name="Other").exists() and not medical_condition_details:
-            raise ValidationError("You must provide details of the medical condition if 'Other' is selected.")
+            if none_condition and none_condition in medical_conditions and len(medical_conditions) > 1:
+                raise ValidationError(_("You cannot select 'None' alongside other medical conditions."))
+
+        
+            if (not none_condition or none_condition not in medical_conditions) and not details:
+                raise ValidationError(_("You must provide medical condition details."))
 
         return cleaned_data
+
     
 class PreRegisterPublicForm(forms.ModelForm):
 

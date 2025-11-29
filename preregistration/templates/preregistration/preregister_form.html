@@ -343,6 +343,7 @@
             <!-- Información de Cómo se Enteraron -->
             <div class="section-card">
                 <div class="section-title">{% trans "Referral Source" %}</div>
+
                 <div class="form-group">
                     <label for="id_how_did_you_hear">{% trans "How did you hear about us?" %}</label>
                     {{ form.how_did_you_hear }}
@@ -354,9 +355,8 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
 
-            <div class="form-group">
+                <div class="form-group" id="details_group" >
                     <label for="id_how_did_you_hear_details">{% trans "Details" %}</label>
                     {{ form.how_did_you_hear_details }}
                     {% if form.how_did_you_hear_details.errors %}
@@ -368,6 +368,10 @@
                     {% endif %}
                 </div>
             </div>
+
+            </div>
+
+            
 
             <div class="section-card">
                 <div class="form-group">
@@ -390,5 +394,74 @@
             <button type="submit">{% trans "Submit" %}</button>
         </form>
     </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const details = document.getElementById("id_medical_condition_details");
+    let detailsContainer = details.closest('.form-group') || details.parentNode;
+
+    detailsContainer.style.display = "none";
+    details.disabled = true;
+    details.required = false;
+
+    function updateVisibility() {
+        const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][name^="medical_conditions"]'));
+        
+        let otraChecked = false;
+        let ningunaChecked = false;
+
+        checkboxes.forEach(cb => {
+            const label = cb.closest("label")?.textContent?.toLowerCase() || "";
+
+            if (cb.checked && (label.includes("ninguna") || label.includes("none"))) {
+                
+                checkboxes.forEach(other => {
+                    if (other !== cb) other.checked = false;
+                });
+            }
+
+            if (cb.checked && !(label.includes("ninguna") || label.includes("none"))) {
+               
+                checkboxes.forEach(other => {
+                    const txt = other.closest("label")?.textContent?.toLowerCase() || "";
+                    if (txt.includes("ninguna") || txt.includes("none")) {
+                        other.checked = false;
+                    }
+                });
+            }
+
+            if (cb.checked) {
+                const txt = label;
+                if (txt.includes("otra") || txt.includes("other")) otraChecked = true;
+                if (txt.includes("ninguna") || txt.includes("none")) ningunaChecked = true;
+            }
+        });
+
+        
+        if (otraChecked && !ningunaChecked) {
+            detailsContainer.style.display = "";
+            details.disabled = false;
+            details.required = true;
+        } else {
+            detailsContainer.style.display = "none";
+            details.disabled = true;
+            details.required = false;
+            details.value = "";
+        }
+
+        console.log("[medical-js] states -> otra:", otraChecked, "ninguna:", ningunaChecked);
+    }
+
+    // Listener global
+    document.addEventListener("change", function (e) {
+        if (e.target.matches('input[type="checkbox"][name^="medical_conditions"]')) {
+            updateVisibility();
+        }
+    });
+
+    updateVisibility();
+});
+</script>
+
 </body>
 </html>
