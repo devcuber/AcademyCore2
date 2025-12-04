@@ -17,7 +17,6 @@ class DiscoverySource(models.Model):
     def __str__(self):
         return self.name
     
-
 class MedicalCondition(models.Model):
     """Model to represent medical conditions of the members."""
     name = models.CharField(max_length=100, unique=True, verbose_name=_("Condition Name"))
@@ -51,7 +50,7 @@ class Person(models.Model):
     second_last_name = models.CharField(_("Second last name"), max_length=255, blank=False)
     curp = models.CharField(max_length=18, blank=False)
     birth_date = models.DateField(_("Birth date"), blank=False)
-    
+    address = models.TextField(blank=False, verbose_name=_("Address"))
     gender_choices = [
         ('M', _('Male')),
         ('F', _('Female')),
@@ -64,6 +63,19 @@ class Person(models.Model):
     how_did_you_hear = models.ForeignKey('crm.DiscoverySource', on_delete=models.SET_NULL, null=True, blank=False, verbose_name=_("How did you hear about us?"))
     how_did_you_hear_details = models.CharField(_("Additional details"), max_length=255, blank=True, null=True, help_text=_("Provide more details about how you heard about the academy."))  # Detalles de cómo se enteró de la academia
     medical_condition_details = models.CharField(_("Medical condition details"), max_length=255, blank=True, null=True)  # Detalles condiciones medicas
+    weight = models.DecimalField(max_digits=5, decimal_places=2,blank=True,null=True,verbose_name=_("Weight (kg)"))
+    height = models.DecimalField(max_digits=3,decimal_places=2,blank=True,null=True,verbose_name=_("Height (m)"))
+    BLOOD_TYPE_CHOICES = [
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+    ]
+    blood_type = models.CharField(max_length=3, choices=BLOOD_TYPE_CHOICES, blank=True, null=True)
     # Métodos comunes
     @property
     def age(self):
@@ -72,7 +84,6 @@ class Person(models.Model):
         return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
 
     age.fget.short_description = _("Age")
-
 
     @property
     def age_segment(self):
@@ -101,7 +112,6 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
-
 
 class Member(Person):
     """Modelo que representa a un miembro de la academia o club, hereda de Person."""
@@ -215,7 +225,12 @@ class MemberContact(Contact):
         verbose_name = _("Member Contact")
         verbose_name_plural = _("Member Contacts")
         ordering = ['member', 'name']
-
+        constraints = [
+            models.UniqueConstraint(
+                fields=['member', 'phone_number'],
+                name='unique_member_contact_phone'
+            )
+        ]
 
 class AgeSegment(models.Model):
     """Model to represent age segments (e.g., baby, child, adult, senior)."""

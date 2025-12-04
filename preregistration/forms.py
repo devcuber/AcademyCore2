@@ -8,10 +8,13 @@ from django.utils.translation import gettext_lazy as _
 class PreRegisterAdminForm(forms.ModelForm):
     class Meta:
         model = Preregister
-        fields = '__all__'        
+        fields = '__all__'
         widgets = {
-            'birth_date': forms.DateInput(attrs={'type': 'date'}),  # Usa el selector de fecha nativo
-            'medical_conditions': forms.CheckboxSelectMultiple(),  # Cambiar a checkboxes
+            'birth_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+            'medical_conditions': forms.CheckboxSelectMultiple(),
         }
 
     def clean(self):
@@ -58,8 +61,11 @@ class PreRegisterPublicForm(forms.ModelForm):
     class Meta:
         model = Preregister
         fields = [
-            'last_name','second_last_name','name', 'curp', 'birth_date', 'gender', 'phone_number', 'email', 'accept_terms',
-            'photo', 'how_did_you_hear', 'how_did_you_hear_details', 'medical_condition_details'
+            'last_name','second_last_name','name', 'curp', 
+            'birth_date', 'gender', 'phone_number', 'email', 
+            'address', 'accept_terms','photo', 'how_did_you_hear', 
+            'how_did_you_hear_details', 'medical_condition_details',
+            'weight', 'height', 'blood_type'
         ]
 
     def clean_phone_number(self):

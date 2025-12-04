@@ -15,10 +15,42 @@ class PreregisterContactInline(admin.TabularInline):
     extra = 1
     fields = ('name', 'phone_number', 'relation', 'is_primary', 'is_emergency')
 
+class PreregisterLinkInline(admin.TabularInline):
+    model = Preregister
+    extra = 0
+    can_delete = False
+    fields = ["view_preregister"]
+    readonly_fields = ["view_preregister"]
+
+    # Evitar mostrar formulario
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def view_preregister(self, obj):
+        if not obj:
+            return "No hay preregistro asociado"
+
+        url = reverse("admin:preregistration_preregister_change", args=[obj.id])
+        fecha = obj.created_at.strftime("%Y-%m-%d %H:%M")
+
+        return format_html(
+            '<a href="{}">Ver preregistro: {} Creado: {} </a>',
+            url,
+            obj.folio,
+            fecha
+        )
+    view_preregister.short_description = "Preregister"
+
 @admin.register(Preregister)
 class PreregisterAdmin(admin.ModelAdmin):
     form = PreRegisterAdminForm
-    actions = [convert_to_member, cancel_preregisters]  # Agrega la acción personalizada
+    actions = [convert_to_member, cancel_preregisters]
     list_display = (
         'photo_preview', 'folio', 'last_name', 'second_last_name', 'name', 'phone_number', 'approval_status'
     )
@@ -40,12 +72,12 @@ class PreregisterAdmin(admin.ModelAdmin):
     fieldsets = (
         (_('General Information'), {
             'fields': (
-                'approval_status','photo_preview','photo', 'folio', 'last_name', 'second_last_name', 'name', 'curp', 'email', 'phone_number',
+                'approval_status','photo_preview','photo', 'folio', 'last_name', 'second_last_name', 'name', 'curp', 'email', 'address', 'phone_number',
                 'gender', 'birth_date', 'age', 'age_segment'
             ),
         }),
         (_('HEALTH CONDITIONS'), {
-            'fields': ('medical_conditions', 'medical_condition_details'),
+            'fields': ('medical_conditions', 'medical_condition_details','height','weight','blood_type'),
             'classes': ('collapse',)
         }),
         (_('DISCOVERY SOURCE'), {
@@ -57,27 +89,17 @@ class PreregisterAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    def get_readonly_fields(self, request, obj=None):
+        # Todos los campos del modelo
+        readonly = [field.name for field in self.model._meta.fields]
 
-class CustomMemberAdmin(MemberAdmin):
-    def get_preregister_info(self, obj): 
-        if hasattr(obj, 'preregister') and obj.preregister: 
-            preregister_url = reverse('admin:preregistration_preregister_change', args=[obj.preregister.id]) 
-            return format_html('<a href="{}">Folio: {}, Creado: {}</a>', preregister_url, obj.preregister.folio, obj.preregister.created_at) 
-        return "No tiene preregistro asociado."
+        # Además, tus campos personalizados (métodos)
+        readonly += ['photo_preview', 'age', 'age_segment']
 
-    get_preregister_info.short_description = _("PreRegister Information")
-    fieldsets = tuple(list(MemberAdmin.fieldsets) + [
-        (_('PREREGISTER INFORMATION'), {
-            'fields': ('get_preregister_info',),
-            'classes': ('collapse',)
-        })
-    ])
-    readonly_fields = tuple(list(MemberAdmin.readonly_fields) + ['get_preregister_info'] )
-
-admin.site.unregister(Member)
-admin.site.register(Member, CustomMemberAdmin)
+        return readonly
 
 class TermsAndConditionsAdmin(admin.ModelAdmin): 
     list_display = ['title'] 
     fields = ['pdf'] 
 admin.site.register(TermsAndConditions, TermsAndConditionsAdmin)
+

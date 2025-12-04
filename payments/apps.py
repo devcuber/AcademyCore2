@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class PreregistrationConfig(AppConfig):
+class PaymentsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'preregistration'
-    verbose_name = _("Pre-Registration")
+    name = 'payments'
+    verbose_name = _("Payments Management")

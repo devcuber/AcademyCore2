@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 22:01-0600\n"
+"POT-Creation-Date: 2025-11-28 00:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,189 +18,228 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\AcademyCore2\settings.py:137
+#: AcademyCore2/settings.py:138
 msgid "English"
 msgstr "Inglés"
 
-#: .\AcademyCore2\settings.py:138
+#: AcademyCore2/settings.py:139
 msgid "Español"
 msgstr "Español"
 
-#: .\academy\admin.py:23
+#: academy/admin.py:30
 msgid "You must select at least one age segment."
 msgstr "Debes seleccionar al menos un segmento de edad."
 
-#: .\academy\admin.py:27 .\preregistration\forms.py:87
+#: academy/admin.py:34 preregistration/forms.py:93
 msgid "You must select at least one medical condition."
 msgstr "Debes seleccionar al menos una condición médica"
 
-#: .\academy\admin.py:40 .\academy\models.py:13
-msgid "Product"
-msgstr "Producto"
+#: academy/apps.py:7
+msgid "Academy Management"
+msgstr "Academia Administracion"
 
-#: .\academy\admin.py:41 .\academy\models.py:14
-msgid "Products"
-msgstr "Productos"
-
-#: .\academy\models.py:6
+#: academy/models.py:6
 msgid "Code"
 msgstr "Código"
 
-#: .\academy\models.py:7 .\crm\models.py:198
-#: .\preregistration\templates\preregistration\preregister_form.html:129
+#: academy/models.py:7 academy/models.py:19 crm/models.py:211
+#: preregistration/templates/preregistration/preregister_form.html:147
 msgid "Name"
 msgstr "Nombre"
 
-#: .\academy\models.py:8 .\crm\models.py:228
+#: academy/models.py:8 crm/models.py:246
 msgid "Age Segments"
 msgstr "Segmentos de edades"
 
-#: .\academy\models.py:9
+#: academy/models.py:9
 msgid "Health Conditions"
 msgstr "Condiciones de Salud"
 
-#: .\academy\models.py:10 .\crm\models.py:115
-msgid "Members"
-msgstr "Miembros"
+#: academy/models.py:12
+msgid "Product"
+msgstr "Producto"
 
-#: .\crm\admin.py:76
+#: academy/models.py:13
+msgid "Products"
+msgstr "Productos"
+
+#: academy/models.py:22
+msgid "Instructor"
+msgstr "Instructor"
+
+#: academy/models.py:23
+msgid "Instructors"
+msgstr "Instructores"
+
+#: academy/models.py:32
+msgid "Start Time"
+msgstr "Fecha Inicio"
+
+#: academy/models.py:33
+msgid "End Time"
+msgstr "Fecha Fin"
+
+#: academy/models.py:36
+msgid "Academy Profile"
+msgstr "Perfil de Academia"
+
+#: academy/models.py:37
+msgid "Academy Profiles"
+msgstr "Perfiles de la academia"
+
+#: crm/admin.py:79
 msgid "Current Status"
 msgstr "Estado actual"
 
-#: .\crm\admin.py:103 .\crm\admin.py:111 .\crm\models.py:74
+#: crm/admin.py:106 crm/admin.py:114 crm/models.py:87
 msgid "Age"
 msgstr "Edad"
 
-#: .\crm\admin.py:107 .\crm\admin.py:112 .\crm\models.py:227
+#: crm/admin.py:110 crm/admin.py:115 crm/models.py:245
 msgid "Age Segment"
 msgstr "Segmento de edad"
 
-#: .\crm\admin.py:118 .\preregistration\admin.py:35
+#: crm/admin.py:121 preregistration/admin.py:67
 msgid "No image available"
 msgstr "No hay imagen disponible"
 
-#: .\crm\admin.py:120 .\preregistration\admin.py:37
+#: crm/admin.py:123 preregistration/admin.py:69
 msgid "Photo Preview"
 msgstr "Vista previa de foto"
 
-#: .\crm\admin.py:124
+#: crm/admin.py:127
 msgid "GENERAL INFORMATION"
 msgstr "INFORMACION GENERAL"
 
-#: .\crm\admin.py:132 .\preregistration\admin.py:47
+#: crm/admin.py:135 preregistration/admin.py:79
 msgid "HEALTH CONDITIONS"
 msgstr "CONDICIONES DE SALUD"
 
-#: .\crm\admin.py:136 .\preregistration\admin.py:51
+#: crm/admin.py:139 preregistration/admin.py:83
 msgid "DISCOVERY SOURCE"
 msgstr "FUENTE DE DESCUBRIMIENTO"
 
-#: .\crm\models.py:10
+#: crm/models.py:10
 msgid "Source Name"
 msgstr "Nombre de la fuente"
 
-#: .\crm\models.py:13
+#: crm/models.py:13
 msgid "Discovery Source"
 msgstr "Fuente de Descubrimiento"
 
-#: .\crm\models.py:14
+#: crm/models.py:14
 msgid "Discovery Sources"
 msgstr "Fuentes de Descubrimiento"
 
-#: .\crm\models.py:23
+#: crm/models.py:23
 msgid "Condition Name"
 msgstr "Nombre de la condición"
 
-#: .\crm\models.py:26
+#: crm/models.py:26
 msgid "Medical Condition"
 msgstr "Condicion Médica"
 
-#: .\crm\models.py:27
-#: .\preregistration\templates\preregistration\preregister_form.html:321
+#: crm/models.py:27
+#: preregistration/templates/preregistration/preregister_form.html:385
 msgid "Medical Conditions"
 msgstr "Condiciones Médicas"
 
-#: .\crm\models.py:36
+#: crm/models.py:36
 msgid "Status Name"
 msgstr "Estado"
 
-#: .\crm\models.py:39
+#: crm/models.py:39
 msgid "Access Status"
 msgstr "Estado de acceso"
 
-#: .\crm\models.py:40
+#: crm/models.py:40
 msgid "Access Statuses"
 msgstr "Estados de acceso"
 
-#: .\crm\models.py:49
+#: crm/models.py:49
 msgid "First name"
 msgstr "Nombre"
 
-#: .\crm\models.py:50
+#: crm/models.py:50
 msgid "Last name"
 msgstr "Apellido Paterno"
 
-#: .\crm\models.py:51
-#: .\preregistration\templates\preregistration\preregister_form.html:118
+#: crm/models.py:51
+#: preregistration/templates/preregistration/preregister_form.html:136
 msgid "Second last name"
 msgstr "Apellido Materno"
 
-#: .\crm\models.py:53
+#: crm/models.py:53
 msgid "Birth date"
 msgstr "Fecha de nacimiento"
 
-#: .\crm\models.py:56
+#: crm/models.py:54
+#: preregistration/templates/preregistration/preregister_form.html:259
+msgid "Address"
+msgstr "Dirección"
+
+#: crm/models.py:56
 msgid "Male"
 msgstr "Masculino"
 
-#: .\crm\models.py:57
+#: crm/models.py:57
 msgid "Female"
 msgstr "Femenino"
 
-#: .\crm\models.py:58
+#: crm/models.py:58
 msgid "Other"
 msgstr "Otro"
 
-#: .\crm\models.py:60
-#: .\preregistration\templates\preregistration\preregister_form.html:206
+#: crm/models.py:60
+#: preregistration/templates/preregistration/preregister_form.html:224
 msgid "Gender"
 msgstr "Género"
 
-#: .\crm\models.py:61 .\crm\models.py:199
+#: crm/models.py:61 crm/models.py:212
 msgid "Phone number"
 msgstr "Teléfono"
 
-#: .\crm\models.py:62
+#: crm/models.py:62
 msgid "Email address"
 msgstr "Correo Electrónico"
 
-#: .\crm\models.py:63
-#: .\preregistration\templates\preregistration\preregister_form.html:141
+#: crm/models.py:63
+#: preregistration/templates/preregistration/preregister_form.html:159
 msgid "Photo"
 msgstr "Foto"
 
-#: .\crm\models.py:64
-#: .\preregistration\templates\preregistration\preregister_form.html:347
+#: crm/models.py:64
+#: preregistration/templates/preregistration/preregister_form.html:412
 msgid "How did you hear about us?"
 msgstr "¿Cómo se enteró de nosotros?"
 
-#: .\crm\models.py:65
+#: crm/models.py:65
 msgid "Additional details"
 msgstr "Detalles adicionales"
 
-#: .\crm\models.py:65
+#: crm/models.py:65
 msgid "Provide more details about how you heard about the academy."
 msgstr "Proporciona más detalles sobre cómo te enteraste de la academia."
 
-#: .\crm\models.py:66
+#: crm/models.py:66
 msgid "Medical condition details"
 msgstr "Detalles de la condición médica"
 
-#: .\crm\models.py:85
+#: crm/models.py:67
+#: preregistration/templates/preregistration/preregister_form.html:352
+msgid "Weight (kg)"
+msgstr "Peso (Kg)"
+
+#: crm/models.py:68
+#: preregistration/templates/preregistration/preregister_form.html:363
+msgid "Height (m)"
+msgstr "Altura (m)"
+
+#: crm/models.py:98
 msgid "Age segment"
 msgstr "Segmento de edad"
 
-#: .\crm\models.py:91 .\preregistration\forms.py:69
+#: crm/models.py:104 preregistration/forms.py:75
 msgid ""
 "The phone number must contain only digits and be between 10 and 15 "
 "characters long."
@@ -208,316 +247,361 @@ msgstr ""
 "El número de teléfono debe contener solo dígitos y tener entre 10 y 15 "
 "caracteres."
 
-#: .\crm\models.py:96 .\preregistration\forms.py:78
+#: crm/models.py:109 preregistration/forms.py:84
 msgid "The CURP must follow a valid format."
 msgstr "El CURP debe tener un formato válido."
 
-#: .\crm\models.py:108
+#: crm/models.py:121
 msgid "Member code"
 msgstr "Miembro"
 
-#: .\crm\models.py:109
+#: crm/models.py:122
 msgid "Enrollment date"
 msgstr "Fecha de inscripción"
 
-#: .\crm\models.py:111
+#: crm/models.py:124
 msgid "Medical conditions"
 msgstr "Condiciones Médicas"
 
-#: .\crm\models.py:114 .\crm\models.py:162
+#: crm/models.py:127 crm/models.py:175
 msgid "Member"
 msgstr "Miembro"
 
-#: .\crm\models.py:136
+#: crm/models.py:128
+msgid "Members"
+msgstr "Miembros"
+
+#: crm/models.py:149
 msgid "Activo"
 msgstr "Activo"
 
-#: .\crm\models.py:140
+#: crm/models.py:153
 msgid "New member"
 msgstr "Nuevo miembro"
 
-#: .\crm\models.py:163
+#: crm/models.py:176
 msgid "Status"
 msgstr "Estado"
 
-#: .\crm\models.py:164
+#: crm/models.py:177
 msgid "Reason"
 msgstr "Motivo"
 
-#: .\crm\models.py:165
+#: crm/models.py:178
 msgid "Changed by"
 msgstr "Modificado por"
 
-#: .\crm\models.py:166
+#: crm/models.py:179
 msgid "Date changed"
 msgstr "Fecha de modificación"
 
-#: .\crm\models.py:169
+#: crm/models.py:182
 msgid "Member Access Log"
 msgstr "Registro de acceso del miembro"
 
-#: .\crm\models.py:170
+#: crm/models.py:183
 msgid "Member Access Logs"
 msgstr "Registros de acceso de los miembros"
 
-#: .\crm\models.py:179
+#: crm/models.py:192
 msgid "Cannot modify an existing status. You can only add new statuses."
 msgstr ""
 "No se puede modificar un estado existente. Solo se pueden agregar nuevos "
 "estados."
 
-#: .\crm\models.py:185
+#: crm/models.py:198
 msgid "Relation Name"
 msgstr "Parentesco"
 
-#: .\crm\models.py:188
+#: crm/models.py:201
 msgid "Contact Relation"
 msgstr "Relación de Contacto"
 
-#: .\crm\models.py:189
+#: crm/models.py:202
 msgid "Contact Relations"
 msgstr "Relaciones de Contacto"
 
-#: .\crm\models.py:200
+#: crm/models.py:213
 msgid "Relation"
 msgstr "Parentesco"
 
-#: .\crm\models.py:201
+#: crm/models.py:214
 msgid "Primary contact"
 msgstr "Contacto de Pre-registro"
 
-#: .\crm\models.py:202
+#: crm/models.py:215
 msgid "Emergency contact"
 msgstr "Contacto de emergencia"
 
-#: .\crm\models.py:215
+#: crm/models.py:228
 msgid "Member Contact"
 msgstr "Contacto del miembro"
 
-#: .\crm\models.py:216
+#: crm/models.py:229
 msgid "Member Contacts"
 msgstr "Contactos del miembro"
 
-#: .\crm\models.py:222
+#: crm/models.py:240
 msgid "Segment Name"
 msgstr "Segmento"
 
-#: .\crm\models.py:223
+#: crm/models.py:241
 msgid "Minimum Age"
 msgstr "Edad mínima"
 
-#: .\crm\models.py:223
+#: crm/models.py:241
 msgid "Minimum age for this segment in years."
 msgstr "Edad mínima para este segmento (en años)."
 
-#: .\crm\models.py:224
+#: crm/models.py:242
 msgid "Maximum Age"
 msgstr "Edad máxima"
 
-#: .\crm\models.py:224
+#: crm/models.py:242
 msgid "Maximum age for this segment in years."
 msgstr "Edad máxima para este segmento (en años)."
 
-#: .\crm\models.py:237
+#: crm/models.py:255
 msgid "Minimum age must be less than maximum age."
 msgstr "La edad mínima debe ser menor que la edad máxima."
 
-#: .\crm\models.py:248
+#: crm/models.py:266
 #, python-format
 msgid "The age range overlaps with an existing segment: %(segment)s."
 msgstr "El rango de edad se superpone con un segmento existente: %(segment)s."
 
-#: .\preregistration\actions.py:22
+#: payments/apps.py:8
+msgid "Payments Management"
+msgstr "Pago Administración"
+
+#: payments/models.py:19
+msgid "Due Day"
+msgstr "Fecha limite de pago"
+
+#: payments/models.py:20
+msgid "monthly fee"
+msgstr "Cuota mensual"
+
+#: payments/models.py:23
+msgid "Member Payment Profile"
+msgstr "Perfil de pago"
+
+#: payments/models.py:24
+msgid "Member Payment Profiles"
+msgstr "Perfiles de pago"
+
+#: preregistration/actions.py:22
 msgid ""
 "No registrations were canceled because they were already in DONE status."
 msgstr "No se cancelaron registros porque ya estaban en estado FINALIZADO."
 
-#: .\preregistration\actions.py:118
+#: preregistration/actions.py:120
 msgid "Convert selected items to Members"
 msgstr "Convertir los elementos seleccionados en Miembros"
 
-#: .\preregistration\admin.py:41
+#: preregistration/actions.py:121
+msgid "Cancel selected PreRegisters"
+msgstr "Cancelar Pre-Registros seleccionados"
+
+#: preregistration/admin.py:73
 msgid "General Information"
 msgstr "Información General"
 
-#: .\preregistration\admin.py:55
+#: preregistration/admin.py:87
 msgid "TERMS AND CONDITIONS"
 msgstr "TERMINOS Y CONDICIONES"
 
-#: .\preregistration\admin.py:68
-msgid "PreRegister Information"
-msgstr "Información de preregistro"
+#: preregistration/apps.py:8
+msgid "Pre-Registration"
+msgstr "Pre-Registro"
 
-#: .\preregistration\admin.py:70
-msgid "PREREGISTER INFORMATION"
-msgstr "INFOMACION DE PREREGISTRO"
-
-#: .\preregistration\forms.py:40
+#: preregistration/forms.py:43
 msgid "I accept the Terms and Conditions"
 msgstr "Acepto los términos y condiciones"
 
-#: .\preregistration\forms.py:41
+#: preregistration/forms.py:44
 msgid "You must accept the Terms and Conditions to continue."
 msgstr "Debes aceptar los Términos y Condiciones para continuar"
 
-#: .\preregistration\forms.py:93
+#: preregistration/forms.py:99
 msgid "You cannot select 'None' alongside other medical conditions."
 msgstr "No puedes seleccionar 'Ninguna' junto con otras condiciones médicas."
 
-#: .\preregistration\models.py:11
+#: preregistration/models.py:11
 msgid "created at"
 msgstr "creado el"
 
-#: .\preregistration\models.py:12
+#: preregistration/models.py:12
 msgid "Accepted Terms and Conditions"
 msgstr "Términos y Condiciones Aceptados"
 
-#: .\preregistration\models.py:15
+#: preregistration/models.py:15
 msgid "Pending"
 msgstr "Pendiente"
 
-#: .\preregistration\models.py:16
+#: preregistration/models.py:16
 msgid "Done"
 msgstr "Finalizado"
 
-#: .\preregistration\models.py:17
+#: preregistration/models.py:17
 msgid "Canceled"
 msgstr "Cancelado"
 
-#: .\preregistration\models.py:19
+#: preregistration/models.py:19
 msgid "approval status"
 msgstr "Estado de aprobación"
 
-#: .\preregistration\models.py:22
-#: .\preregistration\templates\preregistration\preregister_form.html:7
+#: preregistration/models.py:22
+#: preregistration/templates/preregistration/preregister_form.html:7
 msgid "Pre-register"
 msgstr "Pre-registro"
 
-#: .\preregistration\models.py:23
+#: preregistration/models.py:23
 msgid "Pre-registers"
 msgstr "Pre-registros"
 
-#: .\preregistration\models.py:38
+#: preregistration/models.py:38
 msgid "Pre-register Contact"
 msgstr "Contacto de Pre-registro"
 
-#: .\preregistration\models.py:39
+#: preregistration/models.py:39
 msgid "Pre-register Contacts"
 msgstr "Contactos de Pre-registro"
 
-#: .\preregistration\models.py:46 .\preregistration\models.py:47
-#: .\preregistration\templates\preregistration\preregister_form.html:377
+#: preregistration/models.py:52 preregistration/models.py:53
 msgid "Terms and Conditions"
 msgstr "Términos y Condiciones"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:92
+#: preregistration/templates/preregistration/preregister_form.html:110
 msgid "Pre-register Form"
 msgstr "Formulario de Pre-registro"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:105
+#: preregistration/templates/preregistration/preregister_form.html:123
 msgid "Personal Information"
 msgstr "Información Personal"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:107
+#: preregistration/templates/preregistration/preregister_form.html:125
 msgid "Last Name"
 msgstr "Apellido Paterno"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:144
+#: preregistration/templates/preregistration/preregister_form.html:162
 msgid "Take Photo"
 msgstr "Tomar Foto"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:149
+#: preregistration/templates/preregistration/preregister_form.html:167
 msgid "Choose from Gallery"
 msgstr "Elegir de la galería"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:182
+#: preregistration/templates/preregistration/preregister_form.html:200
 msgid "CURP"
 msgstr "CURP"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:194
+#: preregistration/templates/preregistration/preregister_form.html:212
 msgid "Birth Date"
 msgstr "Fecha de nacimiento"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:218
-#: .\preregistration\templates\preregistration\preregister_form.html:263
-#: .\preregistration\templates\preregistration\preregister_form.html:299
+#: preregistration/templates/preregistration/preregister_form.html:236
+#: preregistration/templates/preregistration/preregister_form.html:292
+#: preregistration/templates/preregistration/preregister_form.html:328
 msgid "Phone Number"
 msgstr "Teléfono"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:230
+#: preregistration/templates/preregistration/preregister_form.html:248
 msgid "Email"
 msgstr "Correo Electrónico"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:244
+#: preregistration/templates/preregistration/preregister_form.html:273
 msgid "Contact Information"
 msgstr "Información de Contacto"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:247
+#: preregistration/templates/preregistration/preregister_form.html:276
 msgid "Main Contact"
 msgstr "Contacto Principal"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:255
-#: .\preregistration\templates\preregistration\preregister_form.html:291
+#: preregistration/templates/preregistration/preregister_form.html:284
+#: preregistration/templates/preregistration/preregister_form.html:320
 msgid "Contact Name"
 msgstr "Nombre del contacto"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:272
-#: .\preregistration\templates\preregistration\preregister_form.html:308
+#: preregistration/templates/preregistration/preregister_form.html:301
+#: preregistration/templates/preregistration/preregister_form.html:337
 msgid "Select Relation"
 msgstr "Seleccionar relación"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:283
+#: preregistration/templates/preregistration/preregister_form.html:312
 msgid "Emergency Contact"
 msgstr "Contacto de emergencia"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:320
+#: preregistration/templates/preregistration/preregister_form.html:349
 msgid "Medical Information"
 msgstr "Información médica"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:331
+#: preregistration/templates/preregistration/preregister_form.html:374
+msgid "Blood Type"
+msgstr "Tipo de sangre"
+
+#: preregistration/templates/preregistration/preregister_form.html:395
 msgid "Medical Condition Details"
 msgstr "Detalles de la condición médica"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:332
+#: preregistration/templates/preregistration/preregister_form.html:396
 msgid "Please provide additional details if you think it is necessary ..."
 msgstr ""
 "Por favor, proporcione detalles adicionales si lo considera necesario..."
 
-#: .\preregistration\templates\preregistration\preregister_form.html:345
+#: preregistration/templates/preregistration/preregister_form.html:409
 msgid "Referral Source"
 msgstr "Fuente de referencia"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:360
+#: preregistration/templates/preregistration/preregister_form.html:423
 msgid "Details"
 msgstr "Detalles"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:376
+#: preregistration/templates/preregistration/preregister_form.html:435
+msgid "Legal Agreements"
+msgstr "Acuerdos Legales"
+
+#: preregistration/templates/preregistration/preregister_form.html:439
 msgid "I accept the"
 msgstr "Acepto los"
 
-#: .\preregistration\templates\preregistration\preregister_form.html:390
+#: preregistration/templates/preregistration/preregister_form.html:440
+msgid "regulations, privacy notice, terms and conditions"
+msgstr "reglamentos, aviso de privacidad, términos y condiciones"
+
+#: preregistration/templates/preregistration/preregister_form.html:452
+msgid "Confirmation"
+msgstr "Confirmación"
+
+#: preregistration/templates/preregistration/preregister_form.html:455
 msgid "Submit"
 msgstr "Enviar"
 
-#: .\preregistration\templates\preregistration\preregister_success.html:7
+#: preregistration/templates/preregistration/preregister_success.html:7
 msgid "Pre-registration Successful"
 msgstr "Pre-registro exitoso"
 
-#: .\preregistration\templates\preregistration\preregister_success.html:12
+#: preregistration/templates/preregistration/preregister_success.html:12
 msgid "Success!"
 msgstr "¡Operación Exitosa!"
 
-#: .\preregistration\templates\preregistration\preregister_success.html:13
+#: preregistration/templates/preregistration/preregister_success.html:13
 msgid "Your pre-registration has been successfully submitted."
 msgstr "Tu pre-registro se ha enviado con éxito."
 
-#: .\preregistration\templates\preregistration\preregister_success.html:14
+#: preregistration/templates/preregistration/preregister_success.html:14
 msgid "Your folio:"
 msgstr "Tu folio:"
 
-#: .\preregistration\templates\preregistration\preregister_success.html:15
+#: preregistration/templates/preregistration/preregister_success.html:15
 msgid "Back to Pre-register"
 msgstr "Volver al Pre-registro"
+
+#~ msgid "Hora inicio"
+#~ msgstr "Hora Inicio"
+
+#~ msgid "PREREGISTER INFORMATION"
+#~ msgstr "INFOMACION DE PREREGISTRO"
 
 #~ msgid "Código"
 #~ msgstr "Código"
@@ -527,6 +611,3 @@ msgstr "Volver al Pre-registro"
 
 #~ msgid "Producto"
 #~ msgstr "Producto"
-
-#~ msgid "Productos"
-#~ msgstr "Productos"
